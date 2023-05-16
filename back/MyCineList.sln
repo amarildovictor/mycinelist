@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCineList.API", "MyCineList.API\MyCineList.API.csproj", "{DA12BC44-9B97-454C-A475-1CC5CF01CA11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCineList.Domain", "MyCineList.Domain\MyCineList.Domain.csproj", "{7BCD2837-EB2A-4EE7-AE3A-191735DADAE2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCineList.Data", "MyCineList.Data\MyCineList.Data.csproj", "{F7CC4810-9D4E-494F-A599-9395CAE03857}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DA12BC44-9B97-454C-A475-1CC5CF01CA11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA12BC44-9B97-454C-A475-1CC5CF01CA11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA12BC44-9B97-454C-A475-1CC5CF01CA11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA12BC44-9B97-454C-A475-1CC5CF01CA11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BCD2837-EB2A-4EE7-AE3A-191735DADAE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BCD2837-EB2A-4EE7-AE3A-191735DADAE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BCD2837-EB2A-4EE7-AE3A-191735DADAE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BCD2837-EB2A-4EE7-AE3A-191735DADAE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7CC4810-9D4E-494F-A599-9395CAE03857}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7CC4810-9D4E-494F-A599-9395CAE03857}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7CC4810-9D4E-494F-A599-9395CAE03857}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7CC4810-9D4E-494F-A599-9395CAE03857}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
