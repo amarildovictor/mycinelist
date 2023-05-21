@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace MyCineList.Domain.Entities
 {
@@ -12,10 +9,13 @@ namespace MyCineList.Domain.Entities
             IMDBCharacterName = string.Empty;
         }
 
+        [JsonIgnore]
         public int ID { get; set; }
 
+        [JsonIgnore]
         public PrincipalCastMovie? PrincipalCastMovie { get; set; }
 
+        [JsonProperty("name")]
         public string IMDBCharacterName { get; set; }
     }
 }

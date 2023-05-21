@@ -1,4 +1,6 @@
-﻿namespace MyCineList.Domain.Entities{
+﻿using Newtonsoft.Json;
+
+namespace MyCineList.Domain.Entities{
     public class ImageMovie
     {
         public ImageMovie(){ 
@@ -13,12 +15,16 @@
             this.Height = height;
         }
 
+        [JsonIgnore]
         public int ID { get; set; }
 
+        [JsonProperty("url")]
         public string ImdbPrimaryImageUrl { get; set; }
 
+        [JsonProperty("width")]
         public int Width { get; set; }
 
+        [JsonProperty("height")]
         public int Height { get; set; }
     }
 }

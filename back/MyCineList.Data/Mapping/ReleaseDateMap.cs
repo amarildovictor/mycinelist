@@ -8,20 +8,19 @@ using MyCineList.Domain.Entities;
 
 namespace MyCineList.Data.Mapping
 {
-    public class PlotMovieMap : IEntityTypeConfiguration<PlotMovie>
+    public class ReleaseDateMap : IEntityTypeConfiguration<ReleaseDate>
     {
-        public void Configure(EntityTypeBuilder<PlotMovie> builder)
+        public void Configure(EntityTypeBuilder<ReleaseDate> builder)
         {
-            builder.ToTable("PLOT_MOVIE");
+            builder.ToTable("RELEASE_DATE");
 
             builder.HasKey(x => x.ID);
 
             builder.HasOne(x => x.Movie);
 
-            builder.Property(x => x.IMDBPlainText);
-            builder.Property(x => x.IMDBLanguageID).HasMaxLength(5);
-
-            builder.HasIndex(x => x.IMDBLanguageID);
+            builder.Property(x => x.Day);
+            builder.Property(x => x.Month);
+            builder.Property(x => x.Year);
         }
     }
 }

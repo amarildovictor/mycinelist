@@ -18,6 +18,8 @@ namespace MyCineList.Data.Mapping
             builder.HasOne(x => x.Movie);
             builder.HasOne(x => x.Image);
 
+            builder.HasMany(x => x.PrincipalCastMovieCharacters);
+
             builder.Property(x => x.IMDBNameID).HasMaxLength(10);
             builder.Property(x => x.IMDBName).HasMaxLength(100);
 

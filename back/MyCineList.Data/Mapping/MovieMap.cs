@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MyCineList.Domain.Entities;
@@ -15,17 +11,23 @@ namespace MyCineList.Data.Mapping
             builder.ToTable("MOVIE");
 
             builder.HasKey(x => x.ID);
+            
             builder.HasOne(x => x.ImageMovie);
+            builder.HasMany(x => x.Genres).WithMany().UsingEntity("GENRE_MOVIE");
+            builder.HasOne(x => x.ReleaseDate).WithOne(x => x.Movie);
+            builder.HasOne(x => x.Plot).WithOne(x => x.Movie);
+            
+            builder.HasMany(x => x.PrincipalCastMovies);
             
             builder.Property(x => x.IMDBID).HasMaxLength(10);
             builder.Property(x => x.IMDBAggregateRatting).HasPrecision(3,2);
             builder.Property(x => x.IMDBTitleTypeID).HasMaxLength(50);
-            builder.Property(x => x.IMDBTiltleText).HasMaxLength(200);
+            builder.Property(x => x.IMDBTitleTypeText).HasMaxLength(50);
+            builder.Property(x => x.IMDBTitleText).HasMaxLength(200);
             builder.Property(x => x.ReleaseYear);
-            builder.Property(x => x.ReleaseDate);
 
             builder.HasIndex(x => x.IMDBID).IsUnique();
-            builder.HasIndex(x => x.IMDBTiltleText);
+            builder.HasIndex(x => x.IMDBTitleText);
         }
     }
 }

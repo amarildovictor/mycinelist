@@ -12,8 +12,8 @@ using MyCineList.Data.Context;
 namespace MyCineList.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230516120628_initial")]
-    partial class initial
+    [Migration("20230521221225_fix001")]
+    partial class fix001
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,22 @@ namespace MyCineList.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("MyCineList.Domain.Entities.GenreMovie", b =>
+            modelBuilder.Entity("GENRE_MOVIE", b =>
+                {
+                    b.Property<int>("GenresID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MovieID")
+                        .HasColumnType("int");
+
+                    b.HasKey("GenresID", "MovieID");
+
+                    b.HasIndex("MovieID");
+
+                    b.ToTable("GENRE_MOVIE");
+                });
+
+            modelBuilder.Entity("MyCineList.Domain.Entities.Genre", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -38,16 +53,17 @@ namespace MyCineList.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("MovieID")
-                        .HasColumnType("int");
+                    b.Property<string>("IMDBGenreText")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("IMDBGenreID");
+                    b.HasIndex("IMDBGenreID")
+                        .IsUnique();
 
-                    b.HasIndex("MovieID");
-
-                    b.ToTable("GENRE_MOVIE", (string)null);
+                    b.ToTable("GENRE", (string)null);
                 });
 
             modelBuilder.Entity("MyCineList.Domain.Entities.ImageMovie", b =>
@@ -93,7 +109,7 @@ namespace MyCineList.Data.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<string>("IMDBTiltleText")
+                    b.Property<string>("IMDBTitleText")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
@@ -102,11 +118,12 @@ namespace MyCineList.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("IMDBTitleTypeText")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<int?>("ImageMovieID")
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("ReleaseDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<int?>("ReleaseYear")
                         .HasColumnType("int");
@@ -116,7 +133,7 @@ namespace MyCineList.Data.Migrations
                     b.HasIndex("IMDBID")
                         .IsUnique();
 
-                    b.HasIndex("IMDBTiltleText");
+                    b.HasIndex("IMDBTitleText");
 
                     b.HasIndex("ImageMovieID");
 
@@ -139,14 +156,15 @@ namespace MyCineList.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MovieID")
+                    b.Property<int>("MovieID")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
 
                     b.HasIndex("IMDBLanguageID");
 
-                    b.HasIndex("MovieID");
+                    b.HasIndex("MovieID")
+                        .IsUnique();
 
                     b.ToTable("PLOT_MOVIE", (string)null);
                 });
@@ -211,13 +229,47 @@ namespace MyCineList.Data.Migrations
                     b.ToTable("PRINCIPAL_CAST_MOVIE_CHARACTER", (string)null);
                 });
 
-            modelBuilder.Entity("MyCineList.Domain.Entities.GenreMovie", b =>
+            modelBuilder.Entity("MyCineList.Domain.Entities.ReleaseDate", b =>
                 {
-                    b.HasOne("MyCineList.Domain.Entities.Movie", "Movie")
-                        .WithMany()
-                        .HasForeignKey("MovieID");
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Navigation("Movie");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("Day")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Month")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MovieID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("MovieID")
+                        .IsUnique();
+
+                    b.ToTable("RELEASE_DATE", (string)null);
+                });
+
+            modelBuilder.Entity("GENRE_MOVIE", b =>
+                {
+                    b.HasOne("MyCineList.Domain.Entities.Genre", null)
+                        .WithMany()
+                        .HasForeignKey("GenresID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyCineList.Domain.Entities.Movie", null)
+                        .WithMany()
+                        .HasForeignKey("MovieID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MyCineList.Domain.Entities.Movie", b =>
@@ -232,8 +284,10 @@ namespace MyCineList.Data.Migrations
             modelBuilder.Entity("MyCineList.Domain.Entities.PlotMovie", b =>
                 {
                     b.HasOne("MyCineList.Domain.Entities.Movie", "Movie")
-                        .WithMany()
-                        .HasForeignKey("MovieID");
+                        .WithOne("Plot")
+                        .HasForeignKey("MyCineList.Domain.Entities.PlotMovie", "MovieID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Movie");
                 });
@@ -245,7 +299,7 @@ namespace MyCineList.Data.Migrations
                         .HasForeignKey("ImageID");
 
                     b.HasOne("MyCineList.Domain.Entities.Movie", "Movie")
-                        .WithMany()
+                        .WithMany("PrincipalCastMovies")
                         .HasForeignKey("MovieID");
 
                     b.Navigation("Image");
@@ -256,10 +310,35 @@ namespace MyCineList.Data.Migrations
             modelBuilder.Entity("MyCineList.Domain.Entities.PrincipalCastMovieCharacter", b =>
                 {
                     b.HasOne("MyCineList.Domain.Entities.PrincipalCastMovie", "PrincipalCastMovie")
-                        .WithMany()
+                        .WithMany("PrincipalCastMovieCharacters")
                         .HasForeignKey("PrincipalCastMovieID");
 
                     b.Navigation("PrincipalCastMovie");
+                });
+
+            modelBuilder.Entity("MyCineList.Domain.Entities.ReleaseDate", b =>
+                {
+                    b.HasOne("MyCineList.Domain.Entities.Movie", "Movie")
+                        .WithOne("ReleaseDate")
+                        .HasForeignKey("MyCineList.Domain.Entities.ReleaseDate", "MovieID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+                });
+
+            modelBuilder.Entity("MyCineList.Domain.Entities.Movie", b =>
+                {
+                    b.Navigation("Plot");
+
+                    b.Navigation("PrincipalCastMovies");
+
+                    b.Navigation("ReleaseDate");
+                });
+
+            modelBuilder.Entity("MyCineList.Domain.Entities.PrincipalCastMovie", b =>
+                {
+                    b.Navigation("PrincipalCastMovieCharacters");
                 });
 #pragma warning restore 612, 618
         }

@@ -16,8 +16,6 @@ namespace MyCineList.Data.Context
 
         public DbSet<Movie>? Movie { get; set; }
 
-        public DbSet<GenreMovie>? GenreMovie { get; set; }
-
         public DbSet<PlotMovie>? PlotMovie { get; set; }
 
         public DbSet<PrincipalCastMovie>? PrincipalCastMovie { get; set; }
@@ -28,10 +26,11 @@ namespace MyCineList.Data.Context
         {
             modelBuilder.ApplyConfiguration(new ImageMovieMap());
             modelBuilder.ApplyConfiguration(new MovieMap());
-            modelBuilder.ApplyConfiguration(new GenreMovieMap());
+            modelBuilder.ApplyConfiguration(new GenreMap());
             modelBuilder.ApplyConfiguration(new PlotMovieMap());
             modelBuilder.ApplyConfiguration(new PrincipalCastMovieMap());
             modelBuilder.ApplyConfiguration(new PrincipalCastMovieCharacterMap());
+            modelBuilder.ApplyConfiguration(new ReleaseDateMap());
         }
     }
 }
