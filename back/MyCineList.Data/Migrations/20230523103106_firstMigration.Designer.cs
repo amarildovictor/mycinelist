@@ -12,8 +12,8 @@ using MyCineList.Data.Context;
 namespace MyCineList.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230521221225_fix001")]
-    partial class fix001
+    [Migration("20230523103106_firstMigration")]
+    partial class firstMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,31 +25,9 @@ namespace MyCineList.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("GENRE_MOVIE", b =>
-                {
-                    b.Property<int>("GenresID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MovieID")
-                        .HasColumnType("int");
-
-                    b.HasKey("GenresID", "MovieID");
-
-                    b.HasIndex("MovieID");
-
-                    b.ToTable("GENRE_MOVIE");
-                });
-
             modelBuilder.Entity("MyCineList.Domain.Entities.Genre", b =>
                 {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
                     b.Property<string>("IMDBGenreID")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -58,12 +36,24 @@ namespace MyCineList.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("ID");
-
-                    b.HasIndex("IMDBGenreID")
-                        .IsUnique();
+                    b.HasKey("IMDBGenreID");
 
                     b.ToTable("GENRE", (string)null);
+                });
+
+            modelBuilder.Entity("MyCineList.Domain.Entities.GenreMovie", b =>
+                {
+                    b.Property<string>("GenresIMDBGenreID")
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("MovieID")
+                        .HasColumnType("int");
+
+                    b.HasKey("GenresIMDBGenreID", "MovieID");
+
+                    b.HasIndex("MovieID");
+
+                    b.ToTable("GENRE_MOVIE", (string)null);
                 });
 
             modelBuilder.Entity("MyCineList.Domain.Entities.ImageMovie", b =>
@@ -237,16 +227,16 @@ namespace MyCineList.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int>("Day")
+                    b.Property<int?>("Day")
                         .HasColumnType("int");
 
-                    b.Property<int>("Month")
+                    b.Property<int?>("Month")
                         .HasColumnType("int");
 
                     b.Property<int>("MovieID")
                         .HasColumnType("int");
 
-                    b.Property<int>("Year")
+                    b.Property<int?>("Year")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
@@ -257,19 +247,23 @@ namespace MyCineList.Data.Migrations
                     b.ToTable("RELEASE_DATE", (string)null);
                 });
 
-            modelBuilder.Entity("GENRE_MOVIE", b =>
+            modelBuilder.Entity("MyCineList.Domain.Entities.GenreMovie", b =>
                 {
-                    b.HasOne("MyCineList.Domain.Entities.Genre", null)
-                        .WithMany()
-                        .HasForeignKey("GenresID")
+                    b.HasOne("MyCineList.Domain.Entities.Genre", "Genre")
+                        .WithMany("GenreMovie")
+                        .HasForeignKey("GenresIMDBGenreID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyCineList.Domain.Entities.Movie", null)
-                        .WithMany()
+                    b.HasOne("MyCineList.Domain.Entities.Movie", "Movie")
+                        .WithMany("GenresMovie")
                         .HasForeignKey("MovieID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Genre");
+
+                    b.Navigation("Movie");
                 });
 
             modelBuilder.Entity("MyCineList.Domain.Entities.Movie", b =>
@@ -327,8 +321,15 @@ namespace MyCineList.Data.Migrations
                     b.Navigation("Movie");
                 });
 
+            modelBuilder.Entity("MyCineList.Domain.Entities.Genre", b =>
+                {
+                    b.Navigation("GenreMovie");
+                });
+
             modelBuilder.Entity("MyCineList.Domain.Entities.Movie", b =>
                 {
+                    b.Navigation("GenresMovie");
+
                     b.Navigation("Plot");
 
                     b.Navigation("PrincipalCastMovies");

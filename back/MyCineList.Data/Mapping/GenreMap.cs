@@ -10,12 +10,10 @@ namespace MyCineList.Data.Mapping
         {
             builder.ToTable("GENRE");
 
-            builder.HasKey(x => x.ID);
+            builder.HasKey(x => x.IMDBGenreID);
 
             builder.Property(x => x.IMDBGenreID).HasMaxLength(50);
             builder.Property(x => x.IMDBGenreText).HasMaxLength(50);
-
-            builder.HasIndex(x => x.IMDBGenreID).IsUnique();
         }
     }
 }

@@ -5,7 +5,7 @@
 namespace MyCineList.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class firstMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -14,14 +14,12 @@ namespace MyCineList.Data.Migrations
                 name: "GENRE",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     IMDBGenreID = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     IMDBGenreText = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GENRE", x => x.ID);
+                    table.PrimaryKey("PK_GENRE", x => x.IMDBGenreID);
                 });
 
             migrationBuilder.CreateTable(
@@ -67,17 +65,17 @@ namespace MyCineList.Data.Migrations
                 name: "GENRE_MOVIE",
                 columns: table => new
                 {
-                    GenresID = table.Column<int>(type: "int", nullable: false),
+                    GenresIMDBGenreID = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     MovieID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GENRE_MOVIE", x => new { x.GenresID, x.MovieID });
+                    table.PrimaryKey("PK_GENRE_MOVIE", x => new { x.GenresIMDBGenreID, x.MovieID });
                     table.ForeignKey(
-                        name: "FK_GENRE_MOVIE_GENRE_GenresID",
-                        column: x => x.GenresID,
+                        name: "FK_GENRE_MOVIE_GENRE_GenresIMDBGenreID",
+                        column: x => x.GenresIMDBGenreID,
                         principalTable: "GENRE",
-                        principalColumn: "ID",
+                        principalColumn: "IMDBGenreID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_GENRE_MOVIE_MOVIE_MovieID",
@@ -141,9 +139,9 @@ namespace MyCineList.Data.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MovieID = table.Column<int>(type: "int", nullable: false),
-                    Day = table.Column<int>(type: "int", nullable: false),
-                    Month = table.Column<int>(type: "int", nullable: false),
-                    Year = table.Column<int>(type: "int", nullable: false)
+                    Day = table.Column<int>(type: "int", nullable: true),
+                    Month = table.Column<int>(type: "int", nullable: true),
+                    Year = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -174,11 +172,6 @@ namespace MyCineList.Data.Migrations
                         principalTable: "PRINCIPAL_CAST_MOVIE",
                         principalColumn: "ID");
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_GENRE_IMDBGenreID",
-                table: "GENRE",
-                column: "IMDBGenreID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GENRE_MOVIE_MovieID",

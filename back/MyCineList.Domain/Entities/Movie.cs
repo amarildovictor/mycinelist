@@ -43,7 +43,7 @@ namespace MyCineList.Domain.Entities
         public PlotMovie? Plot { get; set; }
 
         [JsonProperty("genres.genres")]
-        public IList<Genre>? Genres { get; set; }
+        public ICollection<GenreMovie>? GenresMovie { get; set; }
 
         public IList<PrincipalCastMovie>? PrincipalCastMovies { get; set; }
     }

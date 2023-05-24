@@ -14,12 +14,12 @@ namespace MyCineList.Domain.Entities
         public int MovieID { get; set; }
 
         [JsonProperty("day")]
-        public int Day { get; set; }
+        public int? Day { get; set; }
 
         [JsonProperty("month")]
-        public int Month { get; set; }
+        public int? Month { get; set; }
 
         [JsonProperty("year")]
-        public int Year { get; set; }
+        public int? Year { get; set; }
     }
 }

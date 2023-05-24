@@ -2,12 +2,19 @@ using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MyCineList.Data.Context;
+using MyCineList.Data.Repositories;
+using MyCineList.Domain.Interfaces.Repositories;
+using MyCineList.Domain.Interfaces.Services;
+using MyCineList.Domain.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<DataContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+
+builder.Services.AddScoped<IMovieRepo, MovieRepo>();
+builder.Services.AddScoped<IMovieService, MovieService>();
 
 // Add services to the container.
 builder.Services.AddControllers()

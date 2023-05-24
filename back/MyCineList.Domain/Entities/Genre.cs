@@ -14,13 +14,13 @@ namespace MyCineList.Domain.Entities
             IMDBGenreText = string.Empty;
         }
 
-        [JsonIgnore]
-        public int ID { get; set; }
-
         [JsonProperty("id")]
         public string IMDBGenreID { get; set; }
 
         [JsonProperty("text")]
         public string IMDBGenreText { get; set; }
+
+        [JsonIgnore]
+        public ICollection<GenreMovie>? GenreMovie { get; set; }
     }
 }
