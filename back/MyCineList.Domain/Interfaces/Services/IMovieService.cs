@@ -1,4 +1,5 @@
 using MyCineList.Domain.Entities;
+using MyCineList.Domain.Enumerators;
 
 namespace MyCineList.Domain.Interfaces.Services
 {
@@ -28,5 +29,28 @@ namespace MyCineList.Domain.Interfaces.Services
         /// <param name="year">Reference year to get the movies. Based on Movie Release year.</param>
         /// <returns>Success on process or not.</returns>
         public Task<bool> AddRangeWithJSONResponseString(int year);
+
+        /// <summary>
+        /// Get the full info movie object list. With all the relationships.
+        /// </summary>
+        /// <param name="pageNumberMovies">Numbers of top items to bring.</param>
+        /// <returns>Full info movie list.</returns>
+        List<Movie> GetMovies(int pageNumberMovies = 30);
+
+        /// <summary>
+        /// Get the full info movie by its id.
+        /// </summary>
+        /// <param name="movieId">Movie id.</param>
+        /// <returns></returns>
+        Movie? GetMovieById(int movieId);
+
+        /// <summary>
+        /// Get the reducted info movie object list without the relationships.
+        /// It has just one relation with Image relationship.
+        /// </summary>
+        /// <param name="timelineRelease">It's the kind of release, like Premiere, Coming Soon etc.</param>
+        /// <param name="pageNumberMovies">Numbers of top items to bring.</param>
+        /// <returns>Reducted (mini-info) movie list</returns>
+        List<Movie> GetReductedInfoMovie(MovieTimelineRelease timelineRelease = MovieTimelineRelease.NONE, int pageNumberMovies = 30);
     }
 }

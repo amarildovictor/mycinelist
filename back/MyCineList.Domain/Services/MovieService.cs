@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MyCineList.Domain.Entities;
+using MyCineList.Domain.Enumerators;
 using MyCineList.Domain.Interfaces.Repositories;
 using MyCineList.Domain.Interfaces.Services;
 using Newtonsoft.Json;
@@ -26,10 +26,7 @@ namespace MyCineList.Domain.Services
 
                 await MovieRepo.SaveChangesAsync();
             }
-            catch(Exception ex)
-            {
-                throw ex;
-            }
+            catch { throw; }
         }
 
         public async Task AddRange(List<Movie>? movies)
@@ -43,10 +40,7 @@ namespace MyCineList.Domain.Services
                     await MovieRepo.SaveChangesAsync();
                 }
             }
-            catch(Exception ex)
-            {
-                throw ex;
-            }
+            catch { throw; }
         }
 
         public async Task<bool> AddRangeWithJSONResponseString(int year)
@@ -87,8 +81,35 @@ namespace MyCineList.Domain.Services
             }
             catch(Exception ex)
             {
-                throw new Exception($"O Erro ocorreu no seguinte link: {next}. Último next executado: {lastNext} Mais detalhes: {ex.Message}");
+                throw new Exception($"O Erro ocorreu no seguinte link: {next}. Último next executado: {lastNext}.", ex);
             }
+        }
+
+        public List<Movie> GetMovies(int pageNumberMovies = 30)
+        {
+            try
+            {
+                return MovieRepo.GetMovies(pageNumberMovies);
+            }
+            catch { throw; }
+        }
+
+        public Movie? GetMovieById(int movieId)
+        {
+            try
+            {
+                return MovieRepo.GetMovieById(movieId);
+            }
+            catch { throw; }
+        }
+
+        public List<Movie> GetReductedInfoMovie(MovieTimelineRelease timelineRelease = MovieTimelineRelease.NONE, int pageNumberMovies = 30)
+        {
+            try
+            {
+                return MovieRepo.GetReductedInfoMovie(pageNumberMovies, timelineRelease);
+            }
+            catch { throw; }
         }
 
         private HttpRequestMessage GetRequestMovieDataBaseAPI(string next)

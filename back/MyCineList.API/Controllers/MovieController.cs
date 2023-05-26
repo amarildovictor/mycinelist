@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using MyCineList.Domain.Entities;
+using MyCineList.Domain.Enumerators;
 using MyCineList.Domain.Interfaces.Services;
 
 namespace MyCineList.API.Controllers
@@ -12,6 +14,69 @@ namespace MyCineList.API.Controllers
         public MovieController(IMovieService movieService)
         {
             this.MovieService = movieService;
+        }
+
+        /// <summary>
+        /// Get the full info movie object list. With all the relationships.
+        /// </summary>
+        /// <returns>Full info movie list.</returns>
+        [HttpGet]
+        public IActionResult Get()
+        {
+            try
+            {
+                List<Movie>? movies = MovieService.GetMovies();
+
+                return Ok(movies);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, $"Erro ao obter a lista de filmes. Erro: {ex.Message}");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// /// Get the full info movie by its id.
+        /// </summary>
+        /// <param name="movieId">Movie id.</param>
+        /// <returns></returns>
+        [HttpGet("{movieId}")]
+        public IActionResult GetMovieById(int movieId)
+        {
+            try
+            {
+                Movie? movie = MovieService.GetMovieById(movieId);
+
+                return Ok(movie);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, $"Erro ao obter a lista de filmes. Erro: {ex.Message}");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Get the reducted info movie object list without the relationships.
+        /// It has just one relation with Image relationship.
+        /// </summary>
+        /// <param name="movieTimelineRelease">It's the kind of release, like Premiere, Coming Soon etc.</param>
+        /// <returns>Reducted (mini-info) movie list</returns>
+        [HttpGet("titles/{movieTimelineRelease}")]
+        public IActionResult GetReductedInfoMovie(MovieTimelineRelease movieTimelineRelease)
+        {
+            try
+            {
+                List<Movie>? movies = MovieService.GetReductedInfoMovie(movieTimelineRelease);
+
+                return Ok(movies);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, $"Erro ao obter a lista reduzida de filmes. Erro: {ex.Message}");
+                throw;
+            }
         }
 
         /// <summary>
