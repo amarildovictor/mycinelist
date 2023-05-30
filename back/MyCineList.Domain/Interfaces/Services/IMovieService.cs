@@ -33,9 +33,10 @@ namespace MyCineList.Domain.Interfaces.Services
         /// <summary>
         /// Get the full info movie object list. With all the relationships.
         /// </summary>
+        /// <param name="searchField">The text to search.<paramref name="searchField"/>
         /// <param name="pageNumberMovies">Numbers of top items to bring.</param>
         /// <returns>Full info movie list.</returns>
-        List<Movie> GetMovies(int pageNumberMovies = 30);
+        List<Movie> GetMovies(string searchField, int pageNumberMovies = 30);
 
         /// <summary>
         /// Get the full info movie by its id.
@@ -50,7 +51,8 @@ namespace MyCineList.Domain.Interfaces.Services
         /// </summary>
         /// <param name="timelineRelease">It's the kind of release, like Premiere, Coming Soon etc.</param>
         /// <param name="pageNumberMovies">Numbers of top items to bring.</param>
+        /// <param name="ignoreNoImageMovie">No include the movies without image.</param>
         /// <returns>Reducted (mini-info) movie list</returns>
-        List<Movie> GetReductedInfoMovie(MovieTimelineRelease timelineRelease = MovieTimelineRelease.NONE, int pageNumberMovies = 30);
+        List<Movie> GetReductedInfoMovie(MovieTimelineRelease timelineRelease = MovieTimelineRelease.NONE, int pageNumberMovies = 30, bool ignoreNoImageMovie = false);
     }
 }

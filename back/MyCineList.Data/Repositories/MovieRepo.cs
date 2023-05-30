@@ -30,11 +30,12 @@ namespace MyCineList.Data.Repositories
             Context?.AddRangeAsync(movies);
         }
 
-        public List<Movie> GetMovies(int pageNumberMovies)
+        public List<Movie> GetMovies(int pageNumberMovies, string searchField)
         {
             IQueryable<Movie>? query = MovieQueryWithAllRelationship;
             
             query = query?
+                    .Where(x => x.IMDBTitleText.Contains(searchField))
                     .OrderByDescending(x => x.ReleaseDate!.Year)
                     .ThenByDescending(x => x.ReleaseDate!.Month)
                     .ThenByDescending(x => x.ReleaseDate!.Day)
@@ -52,9 +53,15 @@ namespace MyCineList.Data.Repositories
             return query!.FirstOrDefault();
         }
 
-        public List<Movie> GetReductedInfoMovie(int pageNumberMovies, MovieTimelineRelease timelineRelease = MovieTimelineRelease.NONE)
+        public List<Movie> GetReductedInfoMovie(int pageNumberMovies, MovieTimelineRelease timelineRelease = MovieTimelineRelease.NONE, bool ignoreNoImageMovie = false)
         {
             IQueryable<Movie>? query = MovieQueryWithMinimumRelationship;
+
+            if (ignoreNoImageMovie) 
+            {
+                query = query?
+                        .Where(x => x.ImageMovie!.ImdbPrimaryImageUrl != null);
+            }
 
             query = query?
                     .AsEnumerable()

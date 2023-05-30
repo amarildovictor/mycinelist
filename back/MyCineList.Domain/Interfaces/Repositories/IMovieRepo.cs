@@ -24,8 +24,9 @@ namespace MyCineList.Domain.Interfaces.Repositories
         /// Get the full info movie object list. With all the relationships.
         /// </summary>
         /// <param name="pageNumberMovies">Numbers of top items to bring.</param>
+        /// <param name="searchField">The text to search.<paramref name="searchField"/>
         /// <returns>Full info movie list.</returns>
-        List<Movie> GetMovies(int pageNumberMovies);
+        List<Movie> GetMovies(int pageNumberMovies, string searchField);
 
         /// <summary>
         /// Get the full info movie by its id.
@@ -40,8 +41,9 @@ namespace MyCineList.Domain.Interfaces.Repositories
         /// </summary>
         /// <param name="pageNumberMovies">Numbers of top items to bring.</param>
         /// <param name="timelineRelease">It's the kind of release, like Premiere, Coming Soon etc.</param>
+        /// <param name="ignoreNoImageMovie">No include the movies without image.</param>
         /// <returns>Reducted (mini-info) movie list</returns>
-        List<Movie> GetReductedInfoMovie(int pageNumberMovies, MovieTimelineRelease timelineRelease);
+        List<Movie> GetReductedInfoMovie(int pageNumberMovies, MovieTimelineRelease timelineRelease, bool ignoreNoImageMovie);
 
         /// <summary>
         /// Filter from a Movie list the new ones.

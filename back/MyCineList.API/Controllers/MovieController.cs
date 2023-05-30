@@ -19,13 +19,14 @@ namespace MyCineList.API.Controllers
         /// <summary>
         /// Get the full info movie object list. With all the relationships.
         /// </summary>
+        /// <param name="searchText">Search text field.</param>
         /// <returns>Full info movie list.</returns>
-        [HttpGet]
-        public IActionResult Get()
+        [HttpGet("search")]
+        public IActionResult Get(string? searchText = null)
         {
             try
             {
-                List<Movie>? movies = MovieService.GetMovies();
+                List<Movie>? movies = MovieService.GetMovies(searchText ?? string.Empty);
 
                 return Ok(movies);
             }
@@ -62,13 +63,15 @@ namespace MyCineList.API.Controllers
         /// It has just one relation with Image relationship.
         /// </summary>
         /// <param name="movieTimelineRelease">It's the kind of release, like Premiere, Coming Soon etc.</param>
+        /// <param name="pageNumberMovies">Numbers of top items to bring.</param>
+        /// <param name="ignoreNoImageMovie">No include the movies without image.</param>
         /// <returns>Reducted (mini-info) movie list</returns>
-        [HttpGet("titles/{movieTimelineRelease}")]
-        public IActionResult GetReductedInfoMovie(MovieTimelineRelease movieTimelineRelease)
+        [HttpGet("search/timeline/{movieTimelineRelease}")]
+        public IActionResult GetReductedInfoMovie(MovieTimelineRelease movieTimelineRelease, int pageNumberMovies = 30, bool ignoreNoImageMovie = false)
         {
             try
             {
-                List<Movie>? movies = MovieService.GetReductedInfoMovie(movieTimelineRelease);
+                List<Movie>? movies = MovieService.GetReductedInfoMovie(movieTimelineRelease, pageNumberMovies, ignoreNoImageMovie);
 
                 return Ok(movies);
             }
