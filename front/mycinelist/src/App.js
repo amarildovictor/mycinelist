@@ -12,7 +12,7 @@ function App(props) {
     {cloneElement(props.children)}
     
     <div className='d-flex justify-content-center mt-3 border-top'></div>
-    <div className='d-flex justify-content-center mt-3 border-top'>© MyCineList - 2023 - Todos os direitos reservados.</div>
+    <div className='d-flex justify-content-center mt-3 border-top border-4 bg-light'>© MyCineList - 2023 - Todos os direitos reservados.</div>
     </>
   );
 }

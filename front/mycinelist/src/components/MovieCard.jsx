@@ -1,7 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import no_image from '../images/No_Image.jpg';
+import { useNavigate } from 'react-router-dom';
 
 export default function MovieCard(props) {
+    const navigate = useNavigate();
+
     if (props.movie.imageMovie == null) {
         props.movie.imageMovie = { imdbPrimaryImageUrl: no_image };
     }
@@ -11,7 +14,8 @@ export default function MovieCard(props) {
     }
 
     return (
-        <div className='ms-1 me-1 mt-2 mb-2' style={{width:'220px', height:'402px'}} title={props.movie.imdbTitleText}>
+        <div className='ms-1 me-1 mt-2 mb-2' style={{width:'220px', height:'402px', cursor:'pointer'}} title={props.movie.imdbTitleText} 
+            onClick={() => navigate(`/movie/${props.movie.id}`)}>
             <div>
                 <div className="d-flex justify-content-center align-items-center overflow-hidden rounded bg-black" style={{height:'322px'}}>
                     <img alt="Filme" className="mw-100" style={{objectFit:'cover'}} src={props.movie.imageMovie?.imdbPrimaryImageUrl}></img>
@@ -34,7 +38,7 @@ export default function MovieCard(props) {
                     style={{width:'110px',height:'40px'}}>
                         <span className='text-primary' title='IMDB'>{props.movie.imdbAggregateRatting}</span>
                         <span className='text-white mx-2'>|</span>
-                        <span className='text-success' title='MyCineList'>7.3</span>
+                        <span className='text-success' title='MyCineList'>-.-</span>
                     </div>
                 </div>
             </div>

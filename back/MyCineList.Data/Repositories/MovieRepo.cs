@@ -30,7 +30,7 @@ namespace MyCineList.Data.Repositories
             Context?.AddRangeAsync(movies);
         }
 
-        public List<Movie> GetMovies(int pageNumberMovies, string searchField)
+        public List<Movie> GetMovies(int page, int pageNumberMovies, string searchField)
         {
             IQueryable<Movie>? query = MovieQueryWithAllRelationship;
             
@@ -39,6 +39,7 @@ namespace MyCineList.Data.Repositories
                     .OrderByDescending(x => x.ReleaseDate!.Year)
                     .ThenByDescending(x => x.ReleaseDate!.Month)
                     .ThenByDescending(x => x.ReleaseDate!.Day)
+                    .Skip((page - 1) * pageNumberMovies)
                     .Take(pageNumberMovies);
             
             return query!.ToList();
@@ -53,7 +54,7 @@ namespace MyCineList.Data.Repositories
             return query!.FirstOrDefault();
         }
 
-        public List<Movie> GetReductedInfoMovie(int pageNumberMovies, MovieTimelineRelease timelineRelease = MovieTimelineRelease.NONE, bool ignoreNoImageMovie = false)
+        public List<Movie> GetReductedInfoMovie(int page, int pageNumberMovies, MovieTimelineRelease timelineRelease = MovieTimelineRelease.NONE, bool ignoreNoImageMovie = false)
         {
             IQueryable<Movie>? query = MovieQueryWithMinimumRelationship;
 
@@ -70,7 +71,7 @@ namespace MyCineList.Data.Repositories
             bool isDescending = !(timelineRelease == MovieTimelineRelease.PREMIERES ||
                                   timelineRelease == MovieTimelineRelease.COMING_SOON);
 
-            return OrderByReleaseDate(query, isDescending)!.Take(pageNumberMovies).ToList();
+            return OrderByReleaseDate(query, isDescending)!.Skip((page - 1) * pageNumberMovies).Take(pageNumberMovies).ToList();
         }
 
         public async Task<List<Movie>?> FilterNewMoviesByList(List<Movie> movies)

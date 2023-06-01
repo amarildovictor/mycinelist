@@ -10,7 +10,7 @@ export default function Home() {
     
     const [comingSoonList, setComingSoonList] = useState([]); 
     const [premieiresList, setPremieiresList] = useState([]);
-    const [onDisplayList, setOnDisplayList] = useState([]);
+    const [inFarewellList, setInFarewellList] = useState([]);
 
     useEffect(() => {
         let movieList = [];
@@ -45,7 +45,7 @@ export default function Home() {
 
         newItemCarousel('Movie/search/timeline/COMING_SOON?pageNumberMovies=3&ignoreNoImageMovie=true', setComingSoonList);
         newItemCarousel('Movie/search/timeline/PREMIERES?pageNumberMovies=3&ignoreNoImageMovie=true', setPremieiresList);
-        newItemCarousel('Movie/search/timeline/ON_DISPLAY?pageNumberMovies=3&ignoreNoImageMovie=true', setOnDisplayList);
+        newItemCarousel('Movie/search/timeline/IN_FAREWELL?pageNumberMovies=3&ignoreNoImageMovie=true', setInFarewellList);
     }, []);
 
     return (
@@ -70,10 +70,10 @@ export default function Home() {
                 <div className='w-25 me-3' style={{minWidth:'355px'}}>
                     <h6 className='d-flex justify-content-center mt-3 mb-3 ms-4 me-4 pb-1 border-bottom rounded-pill'>
                         <FontAwesomeIcon className='me-2 mt-1' icon="fa-solid fa-angles-right" />
-                        <span>Em Cartaz</span>
+                        <span>Em Despedida</span>
                         <FontAwesomeIcon className='ms-2 mt-1' icon="fa-solid fa-angles-left" />
                     </h6>
-                    <ReactCarousel list={onDisplayList}/>
+                    <ReactCarousel list={inFarewellList}/>
                 </div>
             </div>
             <div className='d-flex justify-content-center mt-3'>

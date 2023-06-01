@@ -20,13 +20,15 @@ namespace MyCineList.API.Controllers
         /// Get the full info movie object list. With all the relationships.
         /// </summary>
         /// <param name="searchText">Search text field.</param>
+        /// <param name="pageNumberMovies">Numbers of items to bring.</param>
+        /// <param name="page">Actual page to return data.</param>
         /// <returns>Full info movie list.</returns>
         [HttpGet("search")]
-        public IActionResult Get(string? searchText = null)
+        public IActionResult Get(string? searchText = null, int pageNumberMovies = 30, int page = 1)
         {
             try
             {
-                List<Movie>? movies = MovieService.GetMovies(searchText ?? string.Empty);
+                List<Movie>? movies = MovieService.GetMovies(page, searchText ?? string.Empty, pageNumberMovies);
 
                 return Ok(movies);
             }
@@ -65,13 +67,14 @@ namespace MyCineList.API.Controllers
         /// <param name="movieTimelineRelease">It's the kind of release, like Premiere, Coming Soon etc.</param>
         /// <param name="pageNumberMovies">Numbers of top items to bring.</param>
         /// <param name="ignoreNoImageMovie">No include the movies without image.</param>
+        /// <param name="page">Actual page to return data.</param>
         /// <returns>Reducted (mini-info) movie list</returns>
         [HttpGet("search/timeline/{movieTimelineRelease}")]
-        public IActionResult GetReductedInfoMovie(MovieTimelineRelease movieTimelineRelease, int pageNumberMovies = 30, bool ignoreNoImageMovie = false)
+        public IActionResult GetReductedInfoMovie(MovieTimelineRelease movieTimelineRelease, int pageNumberMovies = 30, bool ignoreNoImageMovie = false, int page = 1)
         {
             try
             {
-                List<Movie>? movies = MovieService.GetReductedInfoMovie(movieTimelineRelease, pageNumberMovies, ignoreNoImageMovie);
+                List<Movie>? movies = MovieService.GetReductedInfoMovie(page, movieTimelineRelease, pageNumberMovies, ignoreNoImageMovie);
 
                 return Ok(movies);
             }

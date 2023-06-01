@@ -33,10 +33,11 @@ namespace MyCineList.Domain.Interfaces.Services
         /// <summary>
         /// Get the full info movie object list. With all the relationships.
         /// </summary>
+        /// <param name="page">Actual page to return data.</param>
         /// <param name="searchField">The text to search.<paramref name="searchField"/>
-        /// <param name="pageNumberMovies">Numbers of top items to bring.</param>
+        /// <param name="pageNumberMovies">Numbers of items to bring.</param>
         /// <returns>Full info movie list.</returns>
-        List<Movie> GetMovies(string searchField, int pageNumberMovies = 30);
+        List<Movie> GetMovies(int page, string searchField, int pageNumberMovies = 30);
 
         /// <summary>
         /// Get the full info movie by its id.
@@ -49,10 +50,11 @@ namespace MyCineList.Domain.Interfaces.Services
         /// Get the reducted info movie object list without the relationships.
         /// It has just one relation with Image relationship.
         /// </summary>
+        /// <param name="page">Actual page to return data.</param>
         /// <param name="timelineRelease">It's the kind of release, like Premiere, Coming Soon etc.</param>
-        /// <param name="pageNumberMovies">Numbers of top items to bring.</param>
+        /// <param name="pageNumberMovies">Numbers of items to bring.</param>
         /// <param name="ignoreNoImageMovie">No include the movies without image.</param>
         /// <returns>Reducted (mini-info) movie list</returns>
-        List<Movie> GetReductedInfoMovie(MovieTimelineRelease timelineRelease = MovieTimelineRelease.NONE, int pageNumberMovies = 30, bool ignoreNoImageMovie = false);
+        List<Movie> GetReductedInfoMovie(int page, MovieTimelineRelease timelineRelease = MovieTimelineRelease.NONE, int pageNumberMovies = 30, bool ignoreNoImageMovie = false);
     }
 }

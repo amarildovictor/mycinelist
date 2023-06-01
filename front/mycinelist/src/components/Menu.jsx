@@ -5,17 +5,15 @@ import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import $ from 'jquery';
-import { useNavigate } from 'react-router-dom';
 
 export default function Menu() {
-  const navigate = useNavigate();
 
   const submitSearch = (e) => {
     e.preventDefault();
 
     var searchTextInput = $('#searchText').val();
 
-    navigate(`/search?searchText=${searchTextInput}`);
+    window.location.href = `/search?searchText=${searchTextInput}`;
   }
 
   return (

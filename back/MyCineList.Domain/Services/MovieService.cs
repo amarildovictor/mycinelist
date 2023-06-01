@@ -85,11 +85,11 @@ namespace MyCineList.Domain.Services
             }
         }
 
-        public List<Movie> GetMovies(string searchField, int pageNumberMovies = 30)
+        public List<Movie> GetMovies(int page, string searchField, int pageNumberMovies = 30)
         {
             try
             {
-                return MovieRepo.GetMovies(pageNumberMovies, searchField);
+                return MovieRepo.GetMovies(page, pageNumberMovies, searchField);
             }
             catch { throw; }
         }
@@ -103,11 +103,11 @@ namespace MyCineList.Domain.Services
             catch { throw; }
         }
 
-        public List<Movie> GetReductedInfoMovie(MovieTimelineRelease timelineRelease = MovieTimelineRelease.NONE, int pageNumberMovies = 30, bool ignoreNoImageMovie = false)
+        public List<Movie> GetReductedInfoMovie(int page, MovieTimelineRelease timelineRelease = MovieTimelineRelease.NONE, int pageNumberMovies = 30, bool ignoreNoImageMovie = false)
         {
             try
             {
-                return MovieRepo.GetReductedInfoMovie(pageNumberMovies, timelineRelease, ignoreNoImageMovie);
+                return MovieRepo.GetReductedInfoMovie(page, pageNumberMovies, timelineRelease, ignoreNoImageMovie);
             }
             catch { throw; }
         }
