@@ -26,7 +26,7 @@ namespace MyCineList.Domain.Services
         {
             _logger.LogInformation("Timed Hosted Service running.");
 
-            _timer = new Timer(async (e) => await DoWork(e), null, TimeSpan.Zero, TimeSpan.FromSeconds(15));
+            _timer = new Timer(async (e) => await DoWork(e), null, TimeSpan.Zero, TimeSpan.FromDays(30));
 
             return Task.CompletedTask;
         }

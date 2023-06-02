@@ -20,6 +20,12 @@ namespace MyCineList.Domain.Interfaces.Repositories
         /// <param name="movies">Movie list.</param>
         void AddRange(List<Movie> movies);
 
+                /// <summary>
+        /// Update a range of Movie. Using a Movie list.
+        /// </summary>
+        /// <param name="movies">Movie list.</param>
+        void UpdateRange(List<Movie> movies);
+
         /// <summary>
         /// Get the full info movie object list. With all the relationships.
         /// </summary>
@@ -52,7 +58,7 @@ namespace MyCineList.Domain.Interfaces.Repositories
         /// </summary>
         /// <param name="movies">Movie list.</param>
         /// <returns>Just the movies that aren't on database.</returns>
-        Task<List<Movie>?> FilterNewMoviesByList(List<Movie> movies);
+        Task<List<Movie>?> FilterNewMoviesByList(List<Movie>? movies);
 
         /// <summary>
         /// Commit the actions in database.

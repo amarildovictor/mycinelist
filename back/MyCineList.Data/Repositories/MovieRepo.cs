@@ -27,7 +27,12 @@ namespace MyCineList.Data.Repositories
 
         public void AddRange(List<Movie> movies)
         {
-            Context?.AddRangeAsync(movies);
+            Context?.AddRange(movies);
+        }
+
+        public void UpdateRange(List<Movie> movies)
+        {
+            Context?.UpdateRange(movies);
         }
 
         public List<Movie> GetMovies(int page, int pageNumberMovies, string searchField)
@@ -74,16 +79,13 @@ namespace MyCineList.Data.Repositories
             return OrderByReleaseDate(query, isDescending)!.Skip((page - 1) * pageNumberMovies).Take(pageNumberMovies).ToList();
         }
 
-        public async Task<List<Movie>?> FilterNewMoviesByList(List<Movie> movies)
+        public async Task<List<Movie>?> FilterNewMoviesByList(List<Movie>? movies)
         {
             IQueryable<Movie>? query = Context?.Movie;
 
-            query = query?.Where(x => movies.Select(y => y.IMDBID).Contains(x.IMDBID));
+            query = query?.Where(x => movies!.Select(y => y.IMDBID).Contains(x.IMDBID));
 
-            var newMoviesList = await query!.ToListAsync();
-            newMoviesList.ForEach(x => movies.RemoveAll(y => y.IMDBID == x.IMDBID));
-
-            return movies;
+            return await query!.ToListAsync();
         }
 
         public async Task<bool> SaveChangesAsync()

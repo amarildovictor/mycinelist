@@ -16,11 +16,18 @@ namespace MyCineList.Domain.Interfaces.Services
         public Task Add(Movie movie);
 
         /// <summary>
-        /// As Add method, here has adding a range of Movie.
+        /// As Add method, here it has adding a range of Movie.
         /// </summary>
         /// <param name="movies">Movie list.</param>
         /// <returns>Success on process or not.</returns>
         public Task AddRange(List<Movie>? movies);
+
+        /// <summary>
+        /// As Add method, here it has update a range of Movie.
+        /// </summary>
+        /// <param name="movies">Movie list.</param>
+        /// <returns>Success on process or not.</returns>
+        public Task UpdateRange(List<Movie>? movies);
 
         /// <summary>
         /// Get the full info movie object list. With all the relationships.

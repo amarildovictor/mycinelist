@@ -42,6 +42,20 @@ namespace MyCineList.Domain.Services
             catch { throw; }
         }
 
+        public async Task UpdateRange(List<Movie>? movies)
+        {
+            try
+            {
+                if (movies !=null && movies.Count > 0)
+                {
+                    MovieRepo.UpdateRange(movies);
+
+                    await MovieRepo.SaveChangesAsync();
+                }
+            }
+            catch { throw; }
+        }
+
         public List<Movie> GetMovies(int page, string searchField, int pageNumberMovies = 30)
         {
             try

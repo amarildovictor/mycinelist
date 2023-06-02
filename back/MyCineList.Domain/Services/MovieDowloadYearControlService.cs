@@ -64,15 +64,11 @@ namespace MyCineList.Domain.Services
                         
                         if (movieJsonResponse != null && movieJsonResponse.results != null && movieJsonResponse.results.Count > 0)
                         {
-                            List<Movie>? newMoviesToAdd = await FilterNewMoviesByList(movieJsonResponse.results);
+                            await NewMoviesAction(movieJsonResponse.results);
 
                             lastNext = next;
                             next = movieJsonResponse.page < 50 ? movieJsonResponse.next : null;
 
-                            if (newMoviesToAdd != null && newMoviesToAdd.Count > 0)
-                            {
-                                await MovieService.AddRange(newMoviesToAdd);
-                            }
                         }
                     }
                 }
@@ -80,6 +76,22 @@ namespace MyCineList.Domain.Services
             catch(Exception ex)
             {
                 throw new Exception($"O Erro ocorreu no seguinte link: {next}. Último next executado: {lastNext}.", ex);
+            }
+        }
+
+        private async Task NewMoviesAction(List<Movie>? movieJsonResponseResults)
+        {
+            List<Movie>? newMoviesToAdd = movieJsonResponseResults;
+            List<Movie>? newMoviesToUpdate = await FilterNewMoviesByList(newMoviesToAdd);
+
+            if (newMoviesToAdd != null && newMoviesToAdd.Count > 0)
+            {
+                await MovieService.AddRange(newMoviesToAdd);
+            }
+
+            if (newMoviesToUpdate != null && newMoviesToUpdate.Count > 0)
+            {
+                await MovieService.UpdateRange(newMoviesToUpdate);
             }
         }
 
@@ -97,11 +109,13 @@ namespace MyCineList.Domain.Services
             };
         }
 
-        private async Task<List<Movie>?> FilterNewMoviesByList(List<Movie> movies)
+        private async Task<List<Movie>?> FilterNewMoviesByList(List<Movie>? movies)
         {
-            List<Movie>? listWithNewMovies = await MovieRepo.FilterNewMoviesByList(movies);
+            List<Movie>? moviesList = await MovieRepo.FilterNewMoviesByList(movies);
 
-            return listWithNewMovies;
+            moviesList?.ForEach(x => movies?.RemoveAll(y => y.IMDBID == x.IMDBID));
+
+            return moviesList;
         }
     }
 }
