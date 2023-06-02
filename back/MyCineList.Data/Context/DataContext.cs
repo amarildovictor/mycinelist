@@ -26,7 +26,9 @@ namespace MyCineList.Data.Context
 
         public DbSet<PrincipalCastMovie>? PrincipalCastMovie { get; set; }
 
-        public DbSet<PrincipalCastMovieCharacter>? principalCastMovieCharacter { get; set; }
+        public DbSet<PrincipalCastMovieCharacter>? PrincipalCastMovieCharacter { get; set; }
+
+        public DbSet<MovieDowloadYearControl>? MovieDowloadYearControl { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -38,6 +40,7 @@ namespace MyCineList.Data.Context
             modelBuilder.ApplyConfiguration(new PrincipalCastMovieMap());
             modelBuilder.ApplyConfiguration(new PrincipalCastMovieCharacterMap());
             modelBuilder.ApplyConfiguration(new ReleaseDateMap());
+            modelBuilder.ApplyConfiguration(new MovieDowloadYearControlMap());
         }
     }
 }

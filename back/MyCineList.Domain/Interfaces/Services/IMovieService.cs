@@ -23,14 +23,6 @@ namespace MyCineList.Domain.Interfaces.Services
         public Task AddRange(List<Movie>? movies);
 
         /// <summary>
-        /// Similar to AddRange, the difference is with parameter that permits to pass a JSON string list response.
-        /// The internal process is responsable to Deserialize the JSON string response to C# object.
-        /// </summary>
-        /// <param name="year">Reference year to get the movies. Based on Movie Release year.</param>
-        /// <returns>Success on process or not.</returns>
-        public Task<bool> AddRangeWithJSONResponseString(int year);
-
-        /// <summary>
         /// Get the full info movie object list. With all the relationships.
         /// </summary>
         /// <param name="page">Actual page to return data.</param>

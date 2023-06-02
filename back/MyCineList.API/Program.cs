@@ -15,6 +15,10 @@ builder.Services.AddDbContext<DataContext>(
 
 builder.Services.AddScoped<IMovieRepo, MovieRepo>();
 builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<IMovieDowloadYearControlRepo, MovieDowloadYearControlRepo>();
+builder.Services.AddScoped<IMovieDowloadYearControlService, MovieDowloadYearControlService>();
+
+builder.Services.AddHostedService<TimedHostedService>();
 
 // Add services to the container.
 builder.Services.AddControllers()
