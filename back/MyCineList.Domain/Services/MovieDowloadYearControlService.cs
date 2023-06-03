@@ -31,7 +31,7 @@ namespace MyCineList.Domain.Services
 
                 foreach (MovieDowloadYearControl movieDowloadYearControl in movieDowloadYearControls ?? new List<MovieDowloadYearControl>())
                 {
-                    await AddRangeWithJSONResponseString(movieDowloadYearControl.Year);
+                    await AddRangeWithJSONResponseString($"/titles?titleType=movie&year={movieDowloadYearControl.Year}&info=base_info&limit=50");
 
                     movieDowloadYearControl.InfoUpdateDate = DateTime.Now;
                     movieDowloadYearControl.ToUpdateNextCall = false;
@@ -43,10 +43,17 @@ namespace MyCineList.Domain.Services
             catch { throw; }
         }
 
-        private async Task AddRangeWithJSONResponseString(int year)
+        public async Task StartUpdateUpcoming(){
+            try
+            {
+                    await AddRangeWithJSONResponseString($"/titles/x/upcoming?titleType=movie&info=base_info&limit=50");
+            }
+            catch { throw; }
+        }
+
+        private async Task AddRangeWithJSONResponseString(string? next)
         {
             var client = new HttpClient();
-            string? next = $"/titles?titleType=movie&year={year}&info=base_info&limit=50";
             string? lastNext = string.Empty;
 
             try
