@@ -21,6 +21,12 @@ namespace MyCineList.Domain.Entities{
         [JsonProperty("url")]
         public string ImdbPrimaryImageUrl { get; set; }
 
+        [JsonIgnore]
+        public string SmallImageUrl { get; set; }
+
+        [JsonIgnore]
+        public string MediumImageUrl { get; set; }
+
         [JsonProperty("width")]
         public int Width { get; set; }
 

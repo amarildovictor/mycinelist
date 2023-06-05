@@ -12,6 +12,8 @@ namespace MyCineList.Data.Mapping
             
             builder.HasKey(x => x.ID);
             builder.Property(x => x.ImdbPrimaryImageUrl).HasMaxLength(1000);
+            builder.Property(x => x.SmallImageUrl).HasMaxLength(1000);
+            builder.Property(x => x.MediumImageUrl).HasMaxLength(1000);
             builder.Property(x => x.Width);
             builder.Property(x => x.Height);
 
