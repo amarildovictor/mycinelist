@@ -10,7 +10,7 @@ pool: HomeLaptop
 
 variables:
   buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+  buildConfiguration: 'back'
 
 steps:
 - task: DotNetCoreCLI@2
