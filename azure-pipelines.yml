@@ -9,8 +9,9 @@ trigger:
 pool: HomeLaptop
 
 variables:
+  solution: '**/*.sln'
   buildPlatform: 'Any CPU'
-  buildConfiguration: 'back'
+  buildConfiguration: 'Release'
 
 steps:
 - task: UseDotNet@2
