@@ -53,4 +53,4 @@ steps:
     deployToSlotOrASE: true
     ResourceGroupName: 'BC_AmarildoVictor_RG'
     SlotName: 'production'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
