@@ -44,13 +44,13 @@ steps:
     targetPath: '$(Build.ArtifactStagingDirectory)' 
     artifactName: 'MyCineList'
 
-- task: AzureRmWebAppDeployment@4
+- task: AzureWebApp@1
   inputs:
-    ConnectionType: 'AzureRM'
     azureSubscription: 'Azure subscription 1 (0b5b72a1-6b25-41cf-b3c5-b35f60f6594c)'
     appType: 'webApp'
-    WebAppName: 'mycinelist'
+    appName: 'mycinelist'
     deployToSlotOrASE: true
-    ResourceGroupName: 'BC_AmarildoVictor_RG'
-    SlotName: 'production'
-    packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+    resourceGroupName: 'BC_AmarildoVictor_RG'
+    slotName: 'production'
+    package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+    deploymentMethod: 'auto'
