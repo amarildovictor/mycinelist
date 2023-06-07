@@ -38,3 +38,16 @@ steps:
     targetPath: '$(Build.ArtifactStagingDirectory)'
     publishLocation: 'pipeline'
   displayName: 'Publish npm artifact'
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'MyCineListServiceConnection'
+    appType: 'webApp'
+    WebAppName: 'mycinelist'
+    deployToSlotOrASE: true
+    ResourceGroupName: 'BC_AmarildoVictor_RG'
+    SlotName: 'production'
+    packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+    enableCustomDeployment: true
+    DeploymentType: 'webDeploy'
