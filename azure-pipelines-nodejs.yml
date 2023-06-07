@@ -16,8 +16,12 @@ steps:
 
 - script: |
     npm install
+  displayName: 'npm install'
+  workingDirectory: front/mycinelist
+
+- script: |
     npm run build
-  displayName: 'npm install and build'
+  displayName: 'npm build'
   workingDirectory: front/mycinelist
 
 - task: CopyFiles@2
