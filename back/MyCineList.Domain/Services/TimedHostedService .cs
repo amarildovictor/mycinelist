@@ -29,11 +29,19 @@ namespace MyCineList.Domain.Services
         {
             _logger.LogInformation("Timed Hosted Service running.");
 
-            _timerUpdateByYear = new Timer(async (e) => await DoWorkUpdateByYear(e), null, TimeSpan.Zero, TimeSpan.FromDays(30));
+            try
+            {
+                _timerUpdateByYear = new Timer(async (e) => await DoWorkUpdateByYear(e), null, TimeSpan.Zero, TimeSpan.FromDays(30));
 
-            _timerUpdateUpcoming = new Timer(async (e) => await DoWorkUpdateUpcoming(e), null, TimeSpan.Zero, TimeSpan.FromDays(20));
+                _timerUpdateUpcoming = new Timer(async (e) => await DoWorkUpdateUpcoming(e), null, TimeSpan.Zero, TimeSpan.FromDays(20));
 
-            return Task.CompletedTask;
+                return Task.CompletedTask;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex.Message);
+                return Task.FromException(ex);
+            }
         }
 
         private async Task DoWorkUpdateByYear(object? state)

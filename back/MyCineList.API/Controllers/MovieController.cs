@@ -35,7 +35,6 @@ namespace MyCineList.API.Controllers
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, $"Erro ao obter a lista de filmes. Erro: {ex.Message}");
-                throw;
             }
         }
 
@@ -56,7 +55,6 @@ namespace MyCineList.API.Controllers
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, $"Erro ao obter a lista de filmes. Erro: {ex.Message}");
-                throw;
             }
         }
 
@@ -81,7 +79,6 @@ namespace MyCineList.API.Controllers
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, $"Erro ao obter a lista reduzida de filmes. Erro: {ex.Message}");
-                throw;
             }
         }
     }
