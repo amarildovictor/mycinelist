@@ -46,7 +46,7 @@ steps:
 
 - task: AzureWebApp@1
   inputs:
-    azureSubscription: 'Azure subscription 1 (0b5b72a1-6b25-41cf-b3c5-b35f60f6594c)'
+    azureSubscription: 'MyCineListServiceConnection'
     appType: 'webApp'
     appName: 'mycinelist'
     deployToSlotOrASE: true
