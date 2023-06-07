@@ -24,8 +24,7 @@ steps:
   inputs:
     sourceFolder: '$(Build.SourcesDirectory)/front/mycinelist'
     contents: |
-       src/*
-       public/*
+       build/*
     targetFolder: '$(Build.ArtifactStagingDirectory)'
   displayName: 'Copy project files'
 
