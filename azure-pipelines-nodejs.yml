@@ -28,7 +28,7 @@ steps:
   inputs:
     sourceFolder: '$(Build.SourcesDirectory)/front/mycinelist'
     contents: |
-       build/*
+       build/**
     targetFolder: '$(Build.ArtifactStagingDirectory)'
   displayName: 'Copy project files'
 
@@ -48,6 +48,6 @@ steps:
     deployToSlotOrASE: true
     ResourceGroupName: 'BC_AmarildoVictor_RG'
     SlotName: 'production'
-    packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+    packageForLinux: '$(Build.ArtifactStagingDirectory)/**'
     enableCustomDeployment: true
     DeploymentType: 'webDeploy'
