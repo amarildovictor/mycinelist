@@ -15,7 +15,21 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    cd .\front\mycinelist\
-    npm install
     npm run build
   displayName: 'npm install and build'
+  workingDirectory: front/mycinelist
+
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: '$(Build.SourcesDirectory)/front/mycinelist'
+    contents: |
+       build/*
+    targetFolder: '$(Build.ArtifactStagingDirectory)'
+  displayName: 'Copy project files'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    artifactName: e2e-server
+    targetPath: '$(Build.ArtifactStagingDirectory)'
+    publishLocation: 'pipeline'
+  displayName: 'Publish npm artifact'
