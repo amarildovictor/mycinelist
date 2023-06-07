@@ -27,9 +27,9 @@ namespace MyCineList.Domain.Services
         public async Task StartUpdateMovieCatalog(){
             try
             {
-                List<MovieDowloadYearControl>? movieDowloadYearControls = MovieDowloadYearControlRepo.GetNextCall();
+                List<MovieDowloadYearControl>? movieDowloadYearControls = MovieDowloadYearControlRepo.GetNextCall() ?? new List<MovieDowloadYearControl>();
 
-                foreach (MovieDowloadYearControl movieDowloadYearControl in movieDowloadYearControls ?? new List<MovieDowloadYearControl>())
+                foreach (MovieDowloadYearControl movieDowloadYearControl in movieDowloadYearControls)
                 {
                     await AddRangeWithJSONResponseString($"/titles?titleType=movie&year={movieDowloadYearControl.Year}&info=base_info&limit=50");
 
@@ -39,6 +39,10 @@ namespace MyCineList.Domain.Services
                     await MovieDowloadYearControlRepo.SaveChangesAsync();
                 }
 
+                if (movieDowloadYearControls.Count() > 0)
+                {
+                    await StartUpdateResizingImages();
+                }
             }
             catch { throw; }
         }
@@ -46,7 +50,25 @@ namespace MyCineList.Domain.Services
         public async Task StartUpdateUpcoming(){
             try
             {
-                    await AddRangeWithJSONResponseString($"/titles/x/upcoming?titleType=movie&info=base_info&limit=50");
+                await AddRangeWithJSONResponseString($"/titles/x/upcoming?titleType=movie&info=base_info&limit=50");
+                await StartUpdateResizingImages();
+            }
+            catch { throw; }
+        }
+
+        public async Task StartUpdateResizingImages(){
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var request = GetRequestResizingImagesFunctionAPI();
+                    using (var response = await client.SendAsync(request))
+                    {
+                        response.EnsureSuccessStatusCode();
+
+                        var responseObj = await response.Content.ReadAsStringAsync();
+                    }
+                }
             }
             catch { throw; }
         }
@@ -74,8 +96,8 @@ namespace MyCineList.Domain.Services
                             await NewMoviesAction(movieJsonResponse.results);
 
                             lastNext = next;
-                            next = movieJsonResponse.page < 50 ? movieJsonResponse.next : null;
-
+                            //next = movieJsonResponse.page < 50 ? movieJsonResponse.next : null;
+                            next=null;
                         }
                     }
                 }
@@ -107,12 +129,21 @@ namespace MyCineList.Domain.Services
             return new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"https://moviesdatabase.p.rapidapi.com{next}"),
+                RequestUri = new Uri($"{Environment.GetEnvironmentVariable("RAPIDAPI_MOVIESDATABASE_URL")}{next}"),
                 Headers =
                 {
-                    { "X-RapidAPI-Key", "b643484d4emsh1f7f6f3e0fa55cep15bad6jsn5e933dc5607a" },
-                    { "X-RapidAPI-Host", "moviesdatabase.p.rapidapi.com" },
+                    { "X-RapidAPI-Key", Environment.GetEnvironmentVariable("X-RapidAPI-Key") },
+                    { "X-RapidAPI-Host", Environment.GetEnvironmentVariable("X-RapidAPI-Host") },
                 },
+            };
+        }
+
+        private HttpRequestMessage GetRequestResizingImagesFunctionAPI()
+        {
+            return new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(Environment.GetEnvironmentVariable("RESIZING_IMAGES_FUNCTION_URL")!)
             };
         }
 

@@ -20,5 +20,11 @@ namespace MyCineList.Domain.Interfaces.Services
         /// The internal process is responsable to Deserialize the JSON string response to C# object.
         /// </summary>
         Task StartUpdateUpcoming();
+
+        /// <summary>
+        /// Create the new utility movie images to show on the website. This enhance the website performance with the best image size to show.
+        /// </summary>
+        /// <returns></returns>
+        Task StartUpdateResizingImages();
     }
 }

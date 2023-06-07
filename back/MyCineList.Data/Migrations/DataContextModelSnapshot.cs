@@ -61,6 +61,9 @@ namespace MyCineList.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<bool>("ConsidererToResizingFunction")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Height")
                         .HasColumnType("int");
 
@@ -70,12 +73,10 @@ namespace MyCineList.Data.Migrations
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("MediumImageUrl")
-                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("SmallImageUrl")
-                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 

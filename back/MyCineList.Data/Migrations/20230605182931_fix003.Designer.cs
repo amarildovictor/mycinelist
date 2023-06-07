@@ -12,7 +12,7 @@ using MyCineList.Data.Context;
 namespace MyCineList.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230605181726_fix003")]
+    [Migration("20230605182931_fix003")]
     partial class fix003
     {
         /// <inheritdoc />
@@ -64,6 +64,9 @@ namespace MyCineList.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<bool>("ConsidererToResizingFunction")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Height")
                         .HasColumnType("int");
 
@@ -73,12 +76,10 @@ namespace MyCineList.Data.Migrations
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("MediumImageUrl")
-                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("SmallImageUrl")
-                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 

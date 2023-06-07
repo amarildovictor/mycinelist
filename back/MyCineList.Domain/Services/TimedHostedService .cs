@@ -65,7 +65,7 @@ namespace MyCineList.Domain.Services
                 
                 var count = Interlocked.Increment(ref executionCount);
 
-                await movieDowloadYearControlService.StartUpdateUpcoming();
+                //await movieDowloadYearControlService.StartUpdateUpcoming();
 
                 _logger.LogInformation(
                     "Timed Hosted Service is working to update upcoming. Count: {Count}", count);

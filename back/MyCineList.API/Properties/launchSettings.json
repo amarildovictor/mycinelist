@@ -17,7 +17,11 @@
       "applicationUrl": "https://localhost:5100;http://localhost:5101",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "TO_EXECUTE_TIMERS": "false"
+        "TO_EXECUTE_TIMERS": "true",
+        "RESIZING_IMAGES_FUNCTION_URL": "http://localhost:7071/api/resizingimages",
+        "RAPIDAPI_MOVIESDATABASE_URL": "https://moviesdatabase.p.rapidapi.com",
+        "X-RapidAPI-Key": "b643484d4emsh1f7f6f3e0fa55cep15bad6jsn5e933dc5607a",
+        "X-RapidAPI-Host": "moviesdatabase.p.rapidapi.com"
       }
     },
     "IIS Express": {
