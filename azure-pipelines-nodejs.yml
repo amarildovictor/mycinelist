@@ -15,7 +15,6 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    cd .\front\mycinelist\
     npm install
     npm run build
   displayName: 'npm install and build'
@@ -23,7 +22,7 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    sourceFolder: '$(Build.SourcesDirectory)'
+    sourceFolder: '$(Build.SourcesDirectory)/front/mycinelist'
     contents: |
        src/*
        public/*
