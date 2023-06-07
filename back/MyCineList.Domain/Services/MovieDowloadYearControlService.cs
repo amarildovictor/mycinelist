@@ -96,8 +96,7 @@ namespace MyCineList.Domain.Services
                             await NewMoviesAction(movieJsonResponse.results);
 
                             lastNext = next;
-                            //next = movieJsonResponse.page < 50 ? movieJsonResponse.next : null;
-                            next=null;
+                            next = movieJsonResponse.page < 50 ? movieJsonResponse.next : null;
                         }
                     }
                 }

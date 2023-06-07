@@ -6,7 +6,7 @@ using MyCineList.Domain.Interfaces.Services;
 namespace MyCineList.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class MovieController : ControllerBase
     {
         public IMovieService MovieService { get; }

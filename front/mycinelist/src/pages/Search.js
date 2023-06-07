@@ -11,17 +11,20 @@ export default function Search(props) {
     const [searchParams] = useSearchParams();
     const searchText = searchParams.has('searchText') ? searchParams.get('searchText') : null;
     const {movieTimelineRelease} = useParams();
-    const [url, setUrl] = useState(urlInicial());
+    const [url, setUrl] = useState(getUrl());
     const [page, setPage] = useState(1);
     
-    function urlInicial() {
+    function getUrl(page = 1) {
+        let url = null;
         if (searchText){
-            return 'Movie/search/?searchText=' + searchText;
+            url = `Movie/search/?searchText=${searchText}&`;
         } else if (movieTimelineRelease) {
-            return `Movie/search/timeline/${movieTimelineRelease}`;
+            url = `Movie/search/timeline/${movieTimelineRelease}?`;
         } else {
-            return 'Movie/search/';
+            url = 'Movie/search?';
         }
+
+        return url + `page=${page}`
     }
 
     useEffect(() => {
@@ -63,7 +66,7 @@ export default function Search(props) {
             }
             </div>
             <div className='d-flex justify-content-center'>
-                <Button id='loadMore' variant="primary" onClick={() => setUrl(`Movie/search/timeline/COMING_SOON?page=${page}`)}>
+                <Button id='loadMore' variant="primary" onClick={() => setUrl(getUrl(page))}>
                     <FontAwesomeIcon icon="fa-solid fa-down-long" />
                     <span className='mx-2'>Carregar Mais</span>
                     <FontAwesomeIcon icon="fa-solid fa-down-long" />

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { getAxiosApiServer } from '../api/axiosBase';
 import ReactCarousel from '../components/ReactCarousel';
 import { useEffect, useState } from 'react';
+import { getImageByMovie } from '../api/utils';
 
 export default function Home() {
     const navigate = useNavigate();
@@ -31,13 +32,7 @@ export default function Home() {
             await getMovies(url);
     
             movieList.map(movie => (
-                list.push({ 
-                    key: movie.id,
-                    primaryImageUrl: movie.imageMovie?.imdbPrimaryImageUrl,
-                    titleText: movie.imdbTitleText,
-                    showDetails: false,
-                    description: null
-                })
+                list.push(getImageByMovie(movie, 'Medium'))
             ))
     
             callback(list);

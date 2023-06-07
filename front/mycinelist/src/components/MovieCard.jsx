@@ -1,13 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import no_image from '../images/No_Image.jpg';
 import { useNavigate } from 'react-router-dom';
+import { getImageByMovie } from '../api/utils';
 
 export default function MovieCard(props) {
     const navigate = useNavigate();
 
-    if (props.movie.imageMovie == null) {
-        props.movie.imageMovie = { imdbPrimaryImageUrl: no_image };
-    }
+    const reductedMovieInfo = getImageByMovie(props.movie, 'Small');
 
     if (props.movie.imdbAggregateRatting == null){
         props.movie.imdbAggregateRatting = '-.-';
@@ -18,7 +16,7 @@ export default function MovieCard(props) {
             onClick={() => navigate(`/movie/${props.movie.id}`)}>
             <div>
                 <div className="d-flex justify-content-center align-items-center overflow-hidden rounded bg-black" style={{height:'322px'}}>
-                    <img alt="Filme" className="mw-100" style={{objectFit:'cover'}} src={props.movie.imageMovie?.imdbPrimaryImageUrl}></img>
+                    <img alt="Filme" className="mw-100" style={{objectFit:'cover'}} src={ reductedMovieInfo.primaryImageUrl }></img>
                 </div>
             </div>
             <div className="position-relative rounded p-2 mt-1 shadow border border-white bg-black">

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getAxiosApiServer } from './../api/axiosBase';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import no_image from '../images/No_Image.jpg';
+import { getImageByMovie } from '../api/utils';
 
 export default function Movie() {
     const {id} = useParams();
@@ -33,7 +33,7 @@ export default function Movie() {
                 </div>
                 <div className='row mt-2 justify-content-center'>
                     <div className='col-4 d-flex justify-content-center align-items-center overflow-hidden mb-2'style={{minWidth:'355px'}}>
-                        <img className="rounded shadow mw-100" src={movie.imageMovie ? movie.imageMovie.imdbPrimaryImageUrl : no_image} 
+                        <img className="rounded shadow mw-100" src={getImageByMovie(movie, 'Medium').primaryImageUrl} 
                             alt={movie.imdbTitleText} title={movie.imdbTitleText} />
                     </div>
                     <div className='col'>
