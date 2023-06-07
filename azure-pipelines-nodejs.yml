@@ -48,6 +48,6 @@ steps:
     deployToSlotOrASE: true
     ResourceGroupName: 'BC_AmarildoVictor_RG'
     SlotName: 'production'
-    packageForLinux: '$(Build.ArtifactStagingDirectory)/**'
+    packageForLinux: '$(Build.ArtifactStagingDirectory)/build'
     enableCustomDeployment: true
     DeploymentType: 'webDeploy'
