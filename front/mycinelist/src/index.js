@@ -14,9 +14,9 @@ root.render(
     <Router basename={process.env.PUBLIC_URL}>
       <Routes>
         <Route path='/' element={<App><Home></Home></App>} />
-        <Route path='/movie/:id' element={<App><Movie></Movie></App>} />
-        <Route path='/search/timeline/:movieTimelineRelease' element={<App><Search></Search></App>} />
-        <Route path='/search/' element={<App><Search></Search></App>} />
+        <Route exact path='/movie/:id' element={<App><Movie></Movie></App>} />
+        <Route exact path='/search/' element={<App><Search></Search></App>} />
+        <Route exact path='/search/timeline/:movieTimelineRelease' element={<App><Search></Search></App>} />
         {/* <Route path='*' element={<PageNotFound />} /> */}
       </Routes>
     </Router>
