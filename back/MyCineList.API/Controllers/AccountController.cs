@@ -43,5 +43,21 @@ namespace MyCineList.API.Controllers
 
             return Ok(user);
         }
+
+        [HttpGet]
+        [Route("anonimo")]
+        [AllowAnonymous]
+        public IActionResult Anonimo()
+        {
+            return Ok("Tem permissão!");
+        }
+
+        [HttpGet]
+        [Route("autenticado")]
+        [Authorize]
+        public IActionResult Autenticado()
+        {
+            return Ok($"Tem permissão! Usuário: {User.Identity?.Name}");
+        }
     }
 }
