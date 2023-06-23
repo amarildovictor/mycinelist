@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyCineList.Domain.Entities.Auth;
@@ -18,6 +19,7 @@ namespace MyCineList.API.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] User user)
         {
             user.UserName = user.Email;
