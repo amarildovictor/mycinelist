@@ -6,6 +6,7 @@ using MyCineList.Domain.Interfaces.Services;
 
 namespace MyCineList.API.Controllers
 {
+    [ApiController]
     [Route("v1/[controller]")]
     public class AccountController : Controller
     {
