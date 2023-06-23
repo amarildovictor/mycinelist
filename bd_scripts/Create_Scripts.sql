@@ -1,4 +1,4 @@
-IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+﻿IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
 BEGIN
     CREATE TABLE [__EFMigrationsHistory] (
         [MigrationId] nvarchar(150) NOT NULL,
@@ -56,8 +56,7 @@ CREATE TABLE [PLOT_MOVIE] (
     [IMDBPlainText] nvarchar(max) NOT NULL,
     [IMDBLanguageID] nvarchar(5) NULL,
     CONSTRAINT [PK_PLOT_MOVIE] PRIMARY KEY ([ID]),
-    CONSTRAINT [FK_PLOT_MOVIE_MOVIE_MovieID] FOREIGN KEY ([MovieID]) REFERENCES [MOVIE] 
-([ID]) ON DELETE CASCADE
+    CONSTRAINT [FK_PLOT_MOVIE_MOVIE_MovieID] FOREIGN KEY ([MovieID]) REFERENCES [MOVIE] ([ID]) ON DELETE CASCADE
 );
 GO
 
@@ -89,7 +88,7 @@ CREATE TABLE [PRINCIPAL_CAST_MOVIE_CHARACTER] (
     [PrincipalCastMovieID] int NULL,
     [IMDBCharacterName] nvarchar(100) NOT NULL,
     CONSTRAINT [PK_PRINCIPAL_CAST_MOVIE_CHARACTER] PRIMARY KEY ([ID]),
-    CONSTRAINT [FK_PRINCIPAL_CAST_MOVIE_CHARACTER_PRINCIPAL_CAST_MOVIE_PrincipalCastMovieID] FOREIGN KEY ([PrincipalCastMovieID]) REFERENCES [PRINCIPAL_CAST_MOVIE] ([ID])      
+    CONSTRAINT [FK_PRINCIPAL_CAST_MOVIE_CHARACTER_PRINCIPAL_CAST_MOVIE_PrincipalCastMovieID] FOREIGN KEY ([PrincipalCastMovieID]) REFERENCES [PRINCIPAL_CAST_MOVIE] ([ID])
 );
 GO
 
@@ -114,13 +113,13 @@ GO
 CREATE UNIQUE INDEX [IX_PLOT_MOVIE_MovieID] ON [PLOT_MOVIE] ([MovieID]);
 GO
 
-CREATE INDEX [IX_PRINCIPAL_CAST_MOVIE_ImageID] ON [PRINCIPAL_CAST_MOVIE] ([ImageID]);   
+CREATE INDEX [IX_PRINCIPAL_CAST_MOVIE_ImageID] ON [PRINCIPAL_CAST_MOVIE] ([ImageID]);
 GO
 
-CREATE INDEX [IX_PRINCIPAL_CAST_MOVIE_IMDBName] ON [PRINCIPAL_CAST_MOVIE] ([IMDBName]); 
+CREATE INDEX [IX_PRINCIPAL_CAST_MOVIE_IMDBName] ON [PRINCIPAL_CAST_MOVIE] ([IMDBName]);
 GO
 
-CREATE INDEX [IX_PRINCIPAL_CAST_MOVIE_MovieID] ON [PRINCIPAL_CAST_MOVIE] ([MovieID]);   
+CREATE INDEX [IX_PRINCIPAL_CAST_MOVIE_MovieID] ON [PRINCIPAL_CAST_MOVIE] ([MovieID]);
 GO
 
 CREATE INDEX [IX_PRINCIPAL_CAST_MOVIE_CHARACTER_IMDBCharacterName] ON [PRINCIPAL_CAST_MOVIE_CHARACTER] ([IMDBCharacterName]);
@@ -133,7 +132,7 @@ CREATE UNIQUE INDEX [IX_RELEASE_DATE_MovieID] ON [RELEASE_DATE] ([MovieID]);
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20230523103106_firstMigration', N'7.0.5');
+VALUES (N'20230523103106_firstMigration', N'7.0.7');
 GO
 
 COMMIT;
@@ -147,12 +146,12 @@ SELECT @var0 = [d].[name]
 FROM [sys].[default_constraints] [d]
 INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
 WHERE ([d].[parent_object_id] = OBJECT_ID(N'[MOVIE]') AND [c].[name] = N'IMDBAggregateRatting');
-IF @var0 IS NOT NULL EXEC(N'ALTER TABLE [MOVIE] DROP CONSTRAINT [' + @var0 + '];');     
+IF @var0 IS NOT NULL EXEC(N'ALTER TABLE [MOVIE] DROP CONSTRAINT [' + @var0 + '];');
 ALTER TABLE [MOVIE] ALTER COLUMN [IMDBAggregateRatting] decimal(4,2) NULL;
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20230523225042_fix001', N'7.0.5');
+VALUES (N'20230523225042_fix001', N'7.0.7');
 GO
 
 COMMIT;
@@ -171,7 +170,7 @@ CREATE TABLE [MOVIE_DOWNLOAD_YEAR_CONTROL] (
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20230602092901_fix002', N'7.0.5');
+VALUES (N'20230602092901_fix002', N'7.0.7');
 GO
 
 COMMIT;
@@ -190,8 +189,235 @@ ALTER TABLE [IMAGE_MOVIE] ADD [SmallImageUrl] nvarchar(1000) NULL;
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20230605182931_fix003', N'7.0.5');
+VALUES (N'20230605182931_fix003', N'7.0.7');
 GO
 
 COMMIT;
 GO
+
+BEGIN TRANSACTION;
+GO
+
+CREATE TABLE [AspNetRoles] (
+    [Id] nvarchar(450) NOT NULL,
+    [Name] nvarchar(256) NULL,
+    [NormalizedName] nvarchar(256) NULL,
+    [ConcurrencyStamp] nvarchar(max) NULL,
+    CONSTRAINT [PK_AspNetRoles] PRIMARY KEY ([Id])
+);
+GO
+
+CREATE TABLE [AspNetUsers] (
+    [Id] nvarchar(450) NOT NULL,
+    [Token] nvarchar(max) NULL,
+    [UserName] nvarchar(256) NULL,
+    [NormalizedUserName] nvarchar(256) NULL,
+    [Email] nvarchar(256) NULL,
+    [NormalizedEmail] nvarchar(256) NULL,
+    [EmailConfirmed] bit NOT NULL,
+    [PasswordHash] nvarchar(max) NULL,
+    [SecurityStamp] nvarchar(max) NULL,
+    [ConcurrencyStamp] nvarchar(max) NULL,
+    [PhoneNumber] nvarchar(max) NULL,
+    [PhoneNumberConfirmed] bit NOT NULL,
+    [TwoFactorEnabled] bit NOT NULL,
+    [LockoutEnd] datetimeoffset NULL,
+    [LockoutEnabled] bit NOT NULL,
+    [AccessFailedCount] int NOT NULL,
+    CONSTRAINT [PK_AspNetUsers] PRIMARY KEY ([Id])
+);
+GO
+
+CREATE TABLE [AspNetRoleClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [RoleId] nvarchar(450) NOT NULL,
+    [ClaimType] nvarchar(max) NULL,
+    [ClaimValue] nvarchar(max) NULL,
+    CONSTRAINT [PK_AspNetRoleClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_AspNetRoleClaims_AspNetRoles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [AspNetRoles] ([Id]) ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE [AspNetUserClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [UserId] nvarchar(450) NOT NULL,
+    [ClaimType] nvarchar(max) NULL,
+    [ClaimValue] nvarchar(max) NULL,
+    CONSTRAINT [PK_AspNetUserClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_AspNetUserClaims_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE [AspNetUserLogins] (
+    [LoginProvider] nvarchar(450) NOT NULL,
+    [ProviderKey] nvarchar(450) NOT NULL,
+    [ProviderDisplayName] nvarchar(max) NULL,
+    [UserId] nvarchar(450) NOT NULL,
+    CONSTRAINT [PK_AspNetUserLogins] PRIMARY KEY ([LoginProvider], [ProviderKey]),
+    CONSTRAINT [FK_AspNetUserLogins_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE [AspNetUserRoles] (
+    [UserId] nvarchar(450) NOT NULL,
+    [RoleId] nvarchar(450) NOT NULL,
+    CONSTRAINT [PK_AspNetUserRoles] PRIMARY KEY ([UserId], [RoleId]),
+    CONSTRAINT [FK_AspNetUserRoles_AspNetRoles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [AspNetRoles] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_AspNetUserRoles_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE [AspNetUserTokens] (
+    [UserId] nvarchar(450) NOT NULL,
+    [LoginProvider] nvarchar(450) NOT NULL,
+    [Name] nvarchar(450) NOT NULL,
+    [Value] nvarchar(max) NULL,
+    CONSTRAINT [PK_AspNetUserTokens] PRIMARY KEY ([UserId], [LoginProvider], [Name]),
+    CONSTRAINT [FK_AspNetUserTokens_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+GO
+
+CREATE INDEX [IX_AspNetRoleClaims_RoleId] ON [AspNetRoleClaims] ([RoleId]);
+GO
+
+CREATE UNIQUE INDEX [RoleNameIndex] ON [AspNetRoles] ([NormalizedName]) WHERE [NormalizedName] IS NOT NULL;
+GO
+
+CREATE INDEX [IX_AspNetUserClaims_UserId] ON [AspNetUserClaims] ([UserId]);
+GO
+
+CREATE INDEX [IX_AspNetUserLogins_UserId] ON [AspNetUserLogins] ([UserId]);
+GO
+
+CREATE INDEX [IX_AspNetUserRoles_RoleId] ON [AspNetUserRoles] ([RoleId]);
+GO
+
+CREATE INDEX [EmailIndex] ON [AspNetUsers] ([NormalizedEmail]);
+GO
+
+CREATE UNIQUE INDEX [UserNameIndex] ON [AspNetUsers] ([NormalizedUserName]) WHERE [NormalizedUserName] IS NOT NULL;
+GO
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20230615121343_fix004', N'7.0.7');
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+ALTER TABLE [AspNetUsers] ADD [Discriminator] nvarchar(max) NOT NULL DEFAULT N'';
+GO
+
+ALTER TABLE [AspNetUsers] ADD [Password] nvarchar(max) NULL;
+GO
+
+CREATE TABLE [USER_MOVIE_LIST] (
+    [ID] int NOT NULL IDENTITY,
+    [UserId] nvarchar(450) NOT NULL,
+    [MovieID] int NOT NULL,
+    [Date] datetime2 NOT NULL,
+    [Rating] int NOT NULL,
+    [isToEmailNotificate] bit NOT NULL,
+    CONSTRAINT [PK_USER_MOVIE_LIST] PRIMARY KEY ([ID]),
+    CONSTRAINT [FK_USER_MOVIE_LIST_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_USER_MOVIE_LIST_MOVIE_MovieID] FOREIGN KEY ([MovieID]) REFERENCES [MOVIE] ([ID]) ON DELETE CASCADE
+);
+GO
+
+CREATE INDEX [IX_USER_MOVIE_LIST_MovieID] ON [USER_MOVIE_LIST] ([MovieID]);
+GO
+
+CREATE INDEX [IX_USER_MOVIE_LIST_UserId] ON [USER_MOVIE_LIST] ([UserId]);
+GO
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20230621204449_fix005', N'7.0.7');
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+ALTER TABLE [USER_MOVIE_LIST] DROP CONSTRAINT [FK_USER_MOVIE_LIST_AspNetUsers_UserId];
+GO
+
+DECLARE @var1 sysname;
+SELECT @var1 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[AspNetUsers]') AND [c].[name] = N'Discriminator');
+IF @var1 IS NOT NULL EXEC(N'ALTER TABLE [AspNetUsers] DROP CONSTRAINT [' + @var1 + '];');
+ALTER TABLE [AspNetUsers] DROP COLUMN [Discriminator];
+GO
+
+DECLARE @var2 sysname;
+SELECT @var2 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[USER_MOVIE_LIST]') AND [c].[name] = N'UserId');
+IF @var2 IS NOT NULL EXEC(N'ALTER TABLE [USER_MOVIE_LIST] DROP CONSTRAINT [' + @var2 + '];');
+ALTER TABLE [USER_MOVIE_LIST] ALTER COLUMN [UserId] nvarchar(450) NULL;
+GO
+
+ALTER TABLE [USER_MOVIE_LIST] ADD CONSTRAINT [FK_USER_MOVIE_LIST_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]);
+GO
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20230622105758_fix006', N'7.0.7');
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+DROP INDEX [IX_USER_MOVIE_LIST_UserId] ON [USER_MOVIE_LIST];
+GO
+
+EXEC sp_rename N'[USER_MOVIE_LIST].[isToEmailNotificate]', N'IsToEmailNotificate', N'COLUMN';
+GO
+
+CREATE UNIQUE INDEX [IX_USER_MOVIE_LIST_UserId_MovieID] ON [USER_MOVIE_LIST] ([UserId], [MovieID]) WHERE [UserId] IS NOT NULL;
+GO
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20230622162841_fix007', N'7.0.7');
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+DECLARE @var3 sysname;
+SELECT @var3 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[USER_MOVIE_LIST]') AND [c].[name] = N'Rating');
+IF @var3 IS NOT NULL EXEC(N'ALTER TABLE [USER_MOVIE_LIST] DROP CONSTRAINT [' + @var3 + '];');
+ALTER TABLE [USER_MOVIE_LIST] ALTER COLUMN [Rating] int NULL;
+GO
+
+DECLARE @var4 sysname;
+SELECT @var4 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[USER_MOVIE_LIST]') AND [c].[name] = N'IsToEmailNotificate');
+IF @var4 IS NOT NULL EXEC(N'ALTER TABLE [USER_MOVIE_LIST] DROP CONSTRAINT [' + @var4 + '];');
+ALTER TABLE [USER_MOVIE_LIST] ALTER COLUMN [IsToEmailNotificate] bit NULL;
+GO
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20230623152944_fix008', N'7.0.7');
+GO
+
+COMMIT;
+GO
+
