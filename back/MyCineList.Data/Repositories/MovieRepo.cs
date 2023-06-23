@@ -14,6 +14,8 @@ namespace MyCineList.Data.Repositories
     {
         public DataContext? Context { get; }
 
+        public string? UserId { get; set; }
+
         #region "PUBLIC METHODS"
         public MovieRepo(DataContext context)
         {
@@ -37,46 +39,73 @@ namespace MyCineList.Data.Repositories
 
         public List<Movie> GetMovies(int page, int pageNumberMovies, string searchField)
         {
-            IQueryable<Movie>? query = MovieQueryWithAllRelationship;
-            
-            query = query?
-                    .Where(x => x.IMDBTitleText.Contains(searchField))
-                    .OrderByDescending(x => x.ReleaseDate!.Year)
-                    .ThenByDescending(x => x.ReleaseDate!.Month)
-                    .ThenByDescending(x => x.ReleaseDate!.Day)
-                    .Skip((page - 1) * pageNumberMovies)
-                    .Take(pageNumberMovies);
-            
+            // query = query?
+            //         .Where(x => x.IMDBTitleText.Contains(searchField))
+            //         .OrderByDescending(x => x.ReleaseDate!.Year)
+            //         .ThenByDescending(x => x.ReleaseDate!.Month)
+            //         .ThenByDescending(x => x.ReleaseDate!.Day)
+            //         .Skip((page - 1) * pageNumberMovies)
+            //         .Take(pageNumberMovies);
+
+            IQueryable<Movie>? query = (
+                from m in MovieQueryWithAllRelationship
+                join um in Context?.UserList!
+                    on new { Id = m.ID, UserId } equals new { Id = um.MovieID, UserId = um.UserId } into userMovies
+                from um in userMovies.DefaultIfEmpty()
+                where m.IMDBTitleText.Contains(searchField)
+                orderby m.ReleaseDate!.Year descending, m.ReleaseDate!.Month descending, m.ReleaseDate!.Day descending
+                select new Movie(m, um.UserId != null, um.Rating)
+                )
+                .Skip((page - 1) * pageNumberMovies)
+                .Take(pageNumberMovies);
+
             return query!.ToList();
         }
 
         public Movie? GetMovieById(int movieId)
         {
-            IQueryable<Movie>? query = MovieQueryWithAllRelationship;
-            
-            query = query?.Where(m => m.ID == movieId);
-            
-            return query!.FirstOrDefault();
+            Movie? movie = (
+                from m in MovieQueryWithAllRelationship
+                join um in Context?.UserList!
+                    on new { Id = m.ID, UserId } equals new { Id = um.MovieID, UserId = um.UserId } into userMovies
+                from um in userMovies.DefaultIfEmpty()
+                where m.ID == movieId
+                select new Movie(m, um.UserId != null, um.Rating)
+                ).FirstOrDefault();
+
+            // IQueryable<Movie>? query = MovieQueryWithAllRelationship;
+
+            // query = query?.Where(m => m.ID == movieId);
+
+            return movie;
         }
 
         public List<Movie> GetReductedInfoMovie(int page, int pageNumberMovies, MovieTimelineRelease timelineRelease = MovieTimelineRelease.NONE, bool ignoreNoImageMovie = false)
         {
-            IQueryable<Movie>? query = MovieQueryWithMinimumRelationship;
+            //var query = MovieQueryWithMinimumRelationship;
 
-            if (ignoreNoImageMovie) 
+            IQueryable<Movie>? query = (
+                            from m in MovieQueryWithMinimumRelationship
+                            join um in Context?.UserList!
+                                on new { Id = m.ID, UserId } equals new { Id = um.MovieID, UserId = um.UserId } into userMovies
+                            from um in userMovies.DefaultIfEmpty()
+                            select new Movie(m, um.UserId != null, um.Rating)
+                            );
+
+            if (query != null)
             {
-                query = query?
-                        .Where(x => x.ImageMovie!.ImdbPrimaryImageUrl != null);
+                IEnumerable<Movie> enumerable = query.AsEnumerable();
+
+                enumerable = enumerable
+                        .Where(x => GetReductedInfoMovieConditional(x, timelineRelease, ignoreNoImageMovie));
+
+                bool isDescending = !(timelineRelease == MovieTimelineRelease.PREMIERES ||
+                                      timelineRelease == MovieTimelineRelease.COMING_SOON);
+
+                return OrderByReleaseDate(enumerable, isDescending).Skip((page - 1) * pageNumberMovies).Take(pageNumberMovies).ToList();
             }
 
-            query = query?
-                    .AsEnumerable()
-                    .Where(x => TimeLineReleaseConditional(x, timelineRelease)).AsQueryable();
-
-            bool isDescending = !(timelineRelease == MovieTimelineRelease.PREMIERES ||
-                                  timelineRelease == MovieTimelineRelease.COMING_SOON);
-
-            return OrderByReleaseDate(query, isDescending)!.Skip((page - 1) * pageNumberMovies).Take(pageNumberMovies).ToList();
+            return new List<Movie>();
         }
 
         public async Task<List<Movie>?> FilterNewMoviesByList(List<Movie>? movies)
@@ -100,9 +129,14 @@ namespace MyCineList.Data.Repositories
         #endregion
 
         #region "PRIVATE METHODS"
-        
-        private bool TimeLineReleaseConditional(Movie movie, MovieTimelineRelease timelineRelease)
+
+        private bool GetReductedInfoMovieConditional(Movie movie, MovieTimelineRelease timelineRelease, bool ignoreNoImageMovie)
         {
+            if (ignoreNoImageMovie && movie.ImageMovie?.ImdbPrimaryImageUrl == null)
+            {
+                return false;
+            }
+
             switch (timelineRelease)
             {
                 case MovieTimelineRelease.PREMIERES:
@@ -118,31 +152,31 @@ namespace MyCineList.Data.Repositories
             }
         }
 
-        private IQueryable<Movie>? OrderByReleaseDate(IQueryable<Movie>? query, bool isDescending = false)
+        private IEnumerable<Movie> OrderByReleaseDate(IEnumerable<Movie> enumerable, bool isDescending = false)
         {
             if (isDescending)
             {
-                query = query?
-                        .OrderByDescending(x => x.ReleaseDate!.Year)
-                        .ThenByDescending(x => x.ReleaseDate!.Month)
-                        .ThenByDescending(x => x.ReleaseDate!.Day);
+                enumerable = enumerable
+                        .OrderByDescending(x => x.ReleaseDate?.Year)
+                        .ThenByDescending(x => x.ReleaseDate?.Month)
+                        .ThenByDescending(x => x.ReleaseDate?.Day);
             }
             else
             {
-                query = query?
-                    .OrderBy(x => x.ReleaseDate!.Year)
-                    .ThenBy(x => x.ReleaseDate!.Month)
-                    .ThenBy(x => x.ReleaseDate!.Day);    
+                enumerable = enumerable
+                    .OrderBy(x => x.ReleaseDate?.Year)
+                    .ThenBy(x => x.ReleaseDate?.Month)
+                    .ThenBy(x => x.ReleaseDate?.Day);
             }
 
-            return query;
+            return enumerable;
         }
 
         private bool PremiereDateTimeConditional(Movie movie)
         {
             DateTime releaseDate = ReleaseDateFormat(movie);
 
-            int premiereCountSubtract = - Convert.ToInt16(DateTime.Now.DayOfWeek);
+            int premiereCountSubtract = -Convert.ToInt16(DateTime.Now.DayOfWeek);
 
             return DateTime.Now.AddDays(GetPremiereCountAdd()) >= releaseDate &&
                    DateTime.Now.AddDays(premiereCountSubtract) <= releaseDate;
@@ -184,7 +218,7 @@ namespace MyCineList.Data.Repositories
 
             return new DateTime(movie.ReleaseDate!.Year ?? 1, movie.ReleaseDate!.Month ?? 1, movie.ReleaseDate!.Day ?? 1);
         }
-        
+
         private int GetPremiereCountAdd()
         {
             const int DAYS_OF_WEEK_NUMBER = 7;
@@ -194,7 +228,7 @@ namespace MyCineList.Data.Repositories
 
         private IQueryable<Movie>? MovieQueryWithAllRelationship
         {
-            get 
+            get
             {
                 return Context?.Movie?.Include(i => i.ImageMovie).Include(i => i.ReleaseDate).Include(i => i.Plot).Include(i => i.GenresMovie);
             }
@@ -202,7 +236,7 @@ namespace MyCineList.Data.Repositories
 
         private IQueryable<Movie>? MovieQueryWithMinimumRelationship
         {
-            get 
+            get
             {
                 return Context?.Movie?.Include(i => i.ImageMovie).Include(i => i.ReleaseDate);
             }

@@ -8,6 +8,8 @@ namespace MyCineList.Domain.Interfaces.Repositories
     /// </summary>
     public interface IMovieRepo
     {
+        string? UserId { get; set; }
+
         /// <summary>
         /// Add the movie in database. The EF control the relantionship adding each information in each table.
         /// </summary>
@@ -20,7 +22,7 @@ namespace MyCineList.Domain.Interfaces.Repositories
         /// <param name="movies">Movie list.</param>
         void AddRange(List<Movie> movies);
 
-                /// <summary>
+        /// <summary>
         /// Update a range of Movie. Using a Movie list.
         /// </summary>
         /// <param name="movies">Movie list.</param>

@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using MyCineList.Domain.Utilities;
 using Newtonsoft.Json;
 
@@ -11,7 +12,25 @@ namespace MyCineList.Domain.Entities
             IMDBID = string.Empty;
             IMDBTitleText = string.Empty;
         }
-        
+
+        public Movie(Movie movie, bool? userFavorite, int? userRating)
+        {
+            ID = movie.ID;
+            IMDBID = movie.IMDBID;
+            IMDBAggregateRatting = movie.IMDBAggregateRatting;
+            IMDBTitleTypeID = movie.IMDBTitleTypeID;
+            IMDBTitleTypeText = movie.IMDBTitleTypeText;
+            IMDBTitleText = movie.IMDBTitleText;
+            ReleaseYear = movie.ReleaseYear;
+            ImageMovie = movie.ImageMovie;
+            ReleaseDate = movie.ReleaseDate;
+            Plot = movie.Plot;
+            GenresMovie = movie.GenresMovie;
+            PrincipalCastMovies = movie.PrincipalCastMovies;
+            UserFavorite = userFavorite;
+            UserRating = userRating;
+        }
+
         [JsonIgnore]
         public int ID { get; set; }
 
@@ -46,5 +65,11 @@ namespace MyCineList.Domain.Entities
         public ICollection<GenreMovie>? GenresMovie { get; set; }
 
         public IList<PrincipalCastMovie>? PrincipalCastMovies { get; set; }
+
+        [NotMapped]
+        public bool? UserFavorite { get; set; }
+
+        [NotMapped]
+        public int? UserRating { get; set; }
     }
 }

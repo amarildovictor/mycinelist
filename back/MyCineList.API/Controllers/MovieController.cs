@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using MyCineList.Domain.Entities;
 using MyCineList.Domain.Enumerators;
@@ -9,7 +10,14 @@ namespace MyCineList.API.Controllers
     [Route("[controller]")]
     public class MovieController : ControllerBase
     {
-        public IMovieService MovieService { get; }
+        private IMovieService MovieService { get; }
+        private string? GetUserId
+        {
+            get
+            {
+                return User.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+        }
 
         public MovieController(IMovieService movieService)
         {
@@ -28,7 +36,7 @@ namespace MyCineList.API.Controllers
         {
             try
             {
-                List<Movie>? movies = MovieService.GetMovies(page, searchText ?? string.Empty, pageNumberMovies);
+                List<Movie>? movies = MovieService.GetMovies(GetUserId, page, searchText ?? string.Empty, pageNumberMovies);
 
                 return Ok(movies);
             }
@@ -48,7 +56,7 @@ namespace MyCineList.API.Controllers
         {
             try
             {
-                Movie? movie = MovieService.GetMovieById(movieId);
+                Movie? movie = MovieService.GetMovieById(GetUserId, movieId);
 
                 return Ok(movie);
             }
@@ -72,7 +80,7 @@ namespace MyCineList.API.Controllers
         {
             try
             {
-                List<Movie>? movies = MovieService.GetReductedInfoMovie(page, movieTimelineRelease, pageNumberMovies, ignoreNoImageMovie);
+                List<Movie>? movies = MovieService.GetReductedInfoMovie(GetUserId, page, movieTimelineRelease, pageNumberMovies, ignoreNoImageMovie);
 
                 return Ok(movies);
             }

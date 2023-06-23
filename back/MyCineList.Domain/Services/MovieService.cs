@@ -11,7 +11,7 @@ namespace MyCineList.Domain.Services
     public class MovieService : IMovieService
     {
         public IMovieRepo MovieRepo { get; }
-        
+
         public MovieService(IMovieRepo movieRepo)
         {
             this.MovieRepo = movieRepo;
@@ -32,7 +32,7 @@ namespace MyCineList.Domain.Services
         {
             try
             {
-                if (movies !=null && movies.Count > 0)
+                if (movies != null && movies.Count > 0)
                 {
                     MovieRepo.AddRange(movies);
 
@@ -46,7 +46,7 @@ namespace MyCineList.Domain.Services
         {
             try
             {
-                if (movies !=null && movies.Count > 0)
+                if (movies != null && movies.Count > 0)
                 {
                     MovieRepo.UpdateRange(movies);
 
@@ -56,28 +56,31 @@ namespace MyCineList.Domain.Services
             catch { throw; }
         }
 
-        public List<Movie> GetMovies(int page, string searchField, int pageNumberMovies = 30)
+        public List<Movie> GetMovies(string? userId, int page, string searchField, int pageNumberMovies = 30)
         {
             try
             {
+                MovieRepo.UserId = userId;
                 return MovieRepo.GetMovies(page, pageNumberMovies, searchField);
             }
             catch { throw; }
         }
 
-        public Movie? GetMovieById(int movieId)
+        public Movie? GetMovieById(string? userId, int movieId)
         {
             try
             {
+                MovieRepo.UserId = userId;
                 return MovieRepo.GetMovieById(movieId);
             }
             catch { throw; }
         }
 
-        public List<Movie> GetReductedInfoMovie(int page, MovieTimelineRelease timelineRelease = MovieTimelineRelease.NONE, int pageNumberMovies = 30, bool ignoreNoImageMovie = false)
+        public List<Movie> GetReductedInfoMovie(string? userId, int page, MovieTimelineRelease timelineRelease = MovieTimelineRelease.NONE, int pageNumberMovies = 30, bool ignoreNoImageMovie = false)
         {
             try
             {
+                MovieRepo.UserId = userId;
                 return MovieRepo.GetReductedInfoMovie(page, pageNumberMovies, timelineRelease, ignoreNoImageMovie);
             }
             catch { throw; }

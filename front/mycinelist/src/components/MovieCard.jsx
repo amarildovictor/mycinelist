@@ -1,26 +1,72 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
 import { getImageByMovie } from '../api/utils';
+import { getAxiosApiServer } from './../api/axiosBase';
+import { useState } from 'react';
+import $ from 'jquery';
 
 export default function MovieCard(props) {
     const navigate = useNavigate();
-
+    const [isFavorite, setIsFavorite] = useState(props.movie.userFavorite);
+    const [isSavingFavorite, setIsSavingFavorite] = useState(false);
     const reductedMovieInfo = getImageByMovie(props.movie, 'Small');
 
-    if (props.movie.imdbAggregateRatting == null){
+    if (props.movie.imdbAggregateRatting == null || props.movie.imdbAggregateRatting === 0) {
         props.movie.imdbAggregateRatting = '-.-';
     }
 
+    const onclick_FavoriteMovie = async ($this) => {
+        var userMovieList = { movie: { id: props.movie.id } };
+        var card = $($this.currentTarget).closest('.movieCard');
+
+        setIsSavingFavorite(true);
+
+        if (!isFavorite) {
+            await getAxiosApiServer().post('/UserApi/movieList', userMovieList)
+                .then(function () {
+                    setIsFavorite(true);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+        }
+        else {
+            await getAxiosApiServer().delete(`/UserApi/movieList/${userMovieList.movie.id}`)
+                .then(function () {
+                    setIsFavorite(false);
+                    card.remove();
+                }).catch(function (error) {
+                    console.log(error);
+                });
+        }
+
+        setIsSavingFavorite(false);
+    };
+
     return (
-        <div className='ms-1 me-1 mt-2 mb-2' style={{width:'220px', height:'402px', cursor:'pointer'}} title={props.movie.imdbTitleText} 
-            onClick={() => navigate(`/movie/${props.movie.id}`)}>
-            <div>
-                <div className="d-flex justify-content-center align-items-center overflow-hidden rounded bg-black" style={{height:'322px'}}>
-                    <img alt="Filme" className="mw-100" style={{objectFit:'cover'}} src={ reductedMovieInfo.primaryImageUrl }></img>
+        <div className='movieCard ms-1 me-1 mt-2 mb-2' style={{ width: '220px', height: '402px' }} title={props.movie.imdbTitleText}>
+            <div className='position-relative'>
+                {props.logged ?
+                    <div id="favoriteMovieHeartDiv" title='Adicionar na minha lista'>
+                        <div className="position-absolute top-0 end-0 border rounded m-1 p-1 bg-light">
+                            {isSavingFavorite ?
+                                <div className="spinner-border text-danger spinner-border-sm" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </div>
+                                :
+                                <FontAwesomeIcon icon={`fa-${isFavorite ? 'solid' : 'regular'} fa-heart`} className="text-danger"
+                                    onClick={onclick_FavoriteMovie} style={{ cursor: 'pointer' }} />
+                            }
+                        </div>
+                    </div> : null
+                }
+                <div className="d-flex justify-content-center align-items-center overflow-hidden rounded bg-black" style={{ height: '322px', cursor: 'pointer' }}
+                    onClick={() => navigate(`/movie/${props.movie.id}`)}>
+                    <img alt="Filme" className="mw-100" style={{ objectFit: 'cover' }} src={reductedMovieInfo.primaryImageUrl}></img>
                 </div>
             </div>
             <div className="position-relative rounded p-2 mt-1 shadow border border-white bg-black">
-                <h6 className="w-100 d-inline-block text-truncate text-white">
+                <h6 className="w-100 d-inline-block text-truncate text-white" onClick={() => navigate(`/movie/${props.movie.id}`)}
+                    style={{ cursor: 'pointer' }}>
                     <FontAwesomeIcon icon="fa-solid fa-caret-right" className='me-1' />
                     {props.movie.imdbTitleText}
                 </h6>
@@ -33,7 +79,7 @@ export default function MovieCard(props) {
                         <FontAwesomeIcon icon="fa-regular fa-star" />
                     </div>
                     <div className='d-flex position-absolute bottom-0 end-0 border-top border-start border-white fs-4 fw-bold justify-content-center'
-                    style={{width:'110px',height:'40px'}}>
+                        style={{ width: '110px', height: '40px' }}>
                         <span className='text-primary' title='IMDB'>{props.movie.imdbAggregateRatting}</span>
                         <span className='text-white mx-2'>|</span>
                         <span className='text-success' title='MyCineList'>-.-</span>
