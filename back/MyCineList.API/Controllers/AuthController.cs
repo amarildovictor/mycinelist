@@ -30,7 +30,7 @@ namespace MyCineList.API.Controllers
             {
                 var user = await UserManager.FindByEmailAsync(model.Email);
 
-                if (user == null || await UserManager.CheckPasswordAsync(user, model.Password))
+                if (user == null || !await UserManager.CheckPasswordAsync(user, model.Password))
                 {
                     return NotFound(new { message = "E-mail ou senha inválidos." });
                 }

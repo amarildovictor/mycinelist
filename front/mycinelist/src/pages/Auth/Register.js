@@ -55,12 +55,11 @@ export default function Register(props) {
                 $('#messagesDiv').hide();
                 props.setLogged(true);
                 navigate('/');
+                authSessions(user);
             })
             .catch(function (error) {
                 fillAlertMessages(error);
             })
-
-        authSessions(user);
     };
 
     function fillAlertMessages(error) {

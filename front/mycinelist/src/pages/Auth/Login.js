@@ -44,12 +44,11 @@ export default function Login(props) {
                 $('#messagesDiv').hide();
                 props.setLogged(true);
                 navigate('/');
+                authSessions(user);
             })
             .catch(function (error) {
                 fillAlertMessages(error);
             })
-
-        authSessions(user);
     };
 
     function fillAlertMessages(error) {

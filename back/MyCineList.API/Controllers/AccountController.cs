@@ -8,12 +8,12 @@ namespace MyCineList.API.Controllers
 {
     [ApiController]
     [Route("v1/[controller]")]
-    public class AccountController : Controller
+    public class AccountController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserManager<User> userManager;
         private readonly IAccessToken accessToken;
 
-        public AccountController(UserManager<IdentityUser> userManager, IAccessToken accessToken)
+        public AccountController(UserManager<User> userManager, IAccessToken accessToken)
         {
             this.accessToken = accessToken;
             this.userManager = userManager;
