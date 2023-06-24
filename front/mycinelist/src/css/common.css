@@ -1,0 +1,19 @@
+.movieCard .img {
+    height: 560px;
+    cursor: pointer;
+}
+
+.movieCard .img img {
+    object-fit: contain;
+}
+
+@media (min-width: 576px) {
+    .movieCard {
+        width: 220px;
+        height: 402px;
+    }
+    .movieCard .img {
+        height: 322px;
+        cursor: pointer;
+    }
+}

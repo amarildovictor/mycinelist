@@ -28,7 +28,7 @@ export default function UserList(props) {
         };
 
         getMoviesByPage();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -41,9 +41,8 @@ export default function UserList(props) {
                 ) : (
                     <div className="d-flex justify-content-center my-3">
                         <h5>
-                            <FontAwesomeIcon
-                                icon="fa-solid fa-magnifying-glass" className="text-warning" />
-                            <span className="ms-2">Busca sem resultados!</span>
+                            <FontAwesomeIcon icon="fa-solid fa-face-sad-tear" className="text-warning" />
+                            <span className="ms-2">Não há nenhum filme adicionado em sua lista!</span>
                         </h5>
                     </div>
                 )}

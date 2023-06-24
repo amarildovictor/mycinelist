@@ -43,11 +43,11 @@ export default function MovieCard(props) {
     };
 
     return (
-        <div className='movieCard ms-1 me-1 mt-2 mb-2' style={{ width: '220px', height: '402px' }} title={props.movie.imdbTitleText}>
+        <div className='movieCard ms-1 me-1 mt-2 mb-2' title={props.movie.imdbTitleText}>
             <div className='position-relative'>
                 {props.logged ?
                     <div id="favoriteMovieHeartDiv" title='Adicionar na minha lista'>
-                        <div className="position-absolute top-0 end-0 border rounded m-1 p-1 bg-light">
+                        <h5 className="position-absolute top-0 end-0 border rounded m-1 p-1 bg-light">
                             {isSavingFavorite ?
                                 <div className="spinner-border text-danger spinner-border-sm" role="status">
                                     <span className="visually-hidden">Loading...</span>
@@ -56,22 +56,22 @@ export default function MovieCard(props) {
                                 <FontAwesomeIcon icon={`fa-${isFavorite ? 'solid' : 'regular'} fa-heart`} className="text-danger"
                                     onClick={onclick_FavoriteMovie} style={{ cursor: 'pointer' }} />
                             }
-                        </div>
+                        </h5>
                     </div> : null
                 }
-                <div className="d-flex justify-content-center align-items-center overflow-hidden rounded bg-black" style={{ height: '322px', cursor: 'pointer' }}
+                <div className="img d-flex justify-content-center align-items-center overflow-hidden rounded bg-black"
                     onClick={() => navigate(`/movie/${props.movie.id}`)}>
-                    <img alt="Filme" className="mw-100" style={{ objectFit: 'cover' }} src={reductedMovieInfo.primaryImageUrl}></img>
+                    <img alt="Filme" className='h-100 w-100' src={reductedMovieInfo.primaryImageUrl}></img>
                 </div>
             </div>
-            <div className="position-relative rounded p-2 mt-1 shadow border border-white bg-black">
-                <h6 className="w-100 d-inline-block text-truncate text-white" onClick={() => navigate(`/movie/${props.movie.id}`)}
+            <div className="rounded mt-1 shadow border border-white bg-black">
+                <h6 className="pt-2 px-2 w-100 text-truncate text-white" onClick={() => navigate(`/movie/${props.movie.id}`)}
                     style={{ cursor: 'pointer' }}>
                     <FontAwesomeIcon icon="fa-solid fa-caret-right" className='me-1' />
                     {props.movie.imdbTitleText}
                 </h6>
-                <div className="d-flex">
-                    <div className='text-warning'>
+                <div className="d-flex align-items-center position-relative" style={{ height: '40px' }}>
+                    <div className='ps-2 text-warning'>
                         <FontAwesomeIcon icon="fa-solid fa-star" />
                         <FontAwesomeIcon icon="fa-solid fa-star" />
                         <FontAwesomeIcon icon="fa-solid fa-star" />
@@ -79,7 +79,7 @@ export default function MovieCard(props) {
                         <FontAwesomeIcon icon="fa-regular fa-star" />
                     </div>
                     <div className='d-flex position-absolute bottom-0 end-0 border-top border-start border-white fs-4 fw-bold justify-content-center'
-                        style={{ width: '110px', height: '40px' }}>
+                        style={{ width: '110px' }}>
                         <span className='text-primary' title='IMDB'>{props.movie.imdbAggregateRatting}</span>
                         <span className='text-white mx-2'>|</span>
                         <span className='text-success' title='MyCineList'>-.-</span>

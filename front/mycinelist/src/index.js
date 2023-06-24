@@ -4,6 +4,7 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import './index.css';
 import App from './App';
 import "bootswatch/dist/lumen/bootstrap.min.css";
+import "./css/common.css"
 import Home from './pages/Home';
 import Search from './pages/Search';
 import Movie from './pages/Movie';

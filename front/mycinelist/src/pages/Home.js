@@ -5,7 +5,6 @@ import { getAxiosApiServer } from '../api/axiosBase';
 import ReactCarousel from '../components/ReactCarousel';
 import { useEffect, useState } from 'react';
 import { getImageByMovie } from '../api/utils';
-import $ from 'jquery';
 
 export default function Home() {
     const navigate = useNavigate();
@@ -13,8 +12,6 @@ export default function Home() {
     const [comingSoonList, setComingSoonList] = useState([]); 
     const [premieiresList, setPremieiresList] = useState([]);
     const [inFarewellList, setInFarewellList] = useState([]);
-
-    $('#homeLinkMenu').addClass('active');
 
     useEffect(() => {
         let movieList = [];
