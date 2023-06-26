@@ -13,7 +13,7 @@ namespace MyCineList.Domain.Entities
             IMDBTitleText = string.Empty;
         }
 
-        public Movie(Movie movie, bool? userFavorite, int? userRating)
+        public Movie(Movie movie, bool? userFavorite, int? userRating, double? myCineListRating)
         {
             ID = movie.ID;
             IMDBID = movie.IMDBID;
@@ -29,6 +29,7 @@ namespace MyCineList.Domain.Entities
             PrincipalCastMovies = movie.PrincipalCastMovies;
             UserFavorite = userFavorite;
             UserRating = userRating;
+            MyCineListRating = myCineListRating;
         }
 
         [JsonIgnore]
@@ -71,5 +72,15 @@ namespace MyCineList.Domain.Entities
 
         [NotMapped]
         public int? UserRating { get; set; }
+
+        [NotMapped]
+        private double? _MyCineListRating;
+
+        [NotMapped]
+        public double? MyCineListRating
+        {
+            get { return _MyCineListRating != null ? double.Round(_MyCineListRating.Value, 1) : null; }
+            set { _MyCineListRating = value; }
+        }
     }
 }

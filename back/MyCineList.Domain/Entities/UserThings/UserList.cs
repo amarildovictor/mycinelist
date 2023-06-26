@@ -17,6 +17,19 @@ namespace MyCineList.Domain.Entities.UserThings
             IsToEmailNotificate = true;
         }
 
+        public UserList(UserList userList, int? userRating, double? myCineListRating)
+        {
+            ID = userList.ID;
+            User = userList.User;
+            UserId = userList.UserId;
+            Movie = userList.Movie;
+            userList.Movie.MyCineListRating = myCineListRating;
+            userList.Movie.UserRating = userRating;
+            MovieID = userList.MovieID;
+            Date = userList.Date;
+            IsToEmailNotificate = userList.IsToEmailNotificate;
+        }
+
         public int ID { get; set; }
 
         public User User { get; set; }
@@ -28,8 +41,6 @@ namespace MyCineList.Domain.Entities.UserThings
         public int MovieID { get; set; }
 
         public DateTime Date { get; set; }
-
-        public int? Rating { get; set; }
 
         public bool? IsToEmailNotificate { get; set; }
     }

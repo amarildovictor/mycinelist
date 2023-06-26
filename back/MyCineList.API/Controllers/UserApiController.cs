@@ -17,10 +17,12 @@ namespace MyCineList.API.Controllers
     public class UserApiController : ControllerBase
     {
         private IUserListService UserListService { get; }
+        private readonly IUserMoviesRatingService UserMoviesRatingService;
         private UserManager<User> UserManager { get; }
 
-        public UserApiController(IUserListService userListService, UserManager<User> userManager)
+        public UserApiController(IUserListService userListService, IUserMoviesRatingService userMoviesRatingService, UserManager<User> userManager)
         {
+            this.UserMoviesRatingService = userMoviesRatingService;
             this.UserManager = userManager;
             this.UserListService = userListService;
         }
@@ -68,6 +70,25 @@ namespace MyCineList.API.Controllers
             }
         }
 
+        [HttpPost("movieList/updateRating")]
+        [Authorize]
+        public async Task<IActionResult> PostRating([FromBody] UserMoviesRating userMoviesRating)
+        {
+            try
+            {
+                userMoviesRating.User.Id = GetUserId();
+
+                await UserMoviesRatingService.Add(userMoviesRating);
+                
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest,
+                $"Ocorreu um erro ao adicionar a nota do filme na lista do usuário: {ex.Message}. {ex}");
+            }
+        }
+
 
         [HttpDelete("movieList/{movieId}")]
         [Authorize]
@@ -85,6 +106,25 @@ namespace MyCineList.API.Controllers
             {
                 return StatusCode(StatusCodes.Status400BadRequest,
                 $"Ocorreu um erro ao remover o filme {movieId} na lista do usuário: {ex.Message}. {ex}");
+            }
+        }
+
+        [HttpDelete("movieList/removeRating{movieId}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteRating(int movieId)
+        {
+            try
+            {
+                string userId = GetUserId();
+
+                await UserMoviesRatingService.Remove(userId, movieId);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest,
+                $"Ocorreu um erro ao remover a nota do filme {movieId} do usuário: {ex.Message}. {ex}");
             }
         }
 

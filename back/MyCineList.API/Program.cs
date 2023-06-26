@@ -34,6 +34,8 @@ builder.Services.AddScoped<IMovieDowloadYearControlRepo, MovieDowloadYearControl
 builder.Services.AddScoped<IMovieDowloadYearControlService, MovieDowloadYearControlService>();
 builder.Services.AddScoped<IUserListRepo, UserListRepo>();
 builder.Services.AddScoped<IUserListService, UserListService>();
+builder.Services.AddScoped<IUserMoviesRatingRepo, UserMoviesRatingRepo>();
+builder.Services.AddScoped<IUserMoviesRatingService, UserMoviesRatingService>();
 builder.Services.AddScoped<IAccessToken, AccessToken>();
 
 builder.Services.AddHostedService<TimedHostedService>();

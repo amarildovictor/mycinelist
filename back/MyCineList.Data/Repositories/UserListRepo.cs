@@ -25,7 +25,18 @@ namespace MyCineList.Data.Repositories
 
             query = query?
             .Where(x => x.UserId == userId)
-            .OrderBy(o => o.Movie.IMDBTitleText);
+            .OrderBy(o => o!.Movie.IMDBTitleText)
+            .Select(a => new UserList
+            (
+                a,
+                (from umr in Context!.UserMoviesRating
+                 where umr.MovieID == a.MovieID && umr.UserId == a.UserId
+                 select umr.Rating).FirstOrDefault(),
+                (from cumr in Context!.UserMoviesRating
+                 where cumr.MovieID == a.MovieID
+                 group cumr by cumr.MovieID into g
+                 select g.Average(a => a.Rating) * 2).FirstOrDefault()
+            ));
 
             var queryList = query?.ToList();
             queryList?.ForEach(x => x.Movie.UserFavorite = true);

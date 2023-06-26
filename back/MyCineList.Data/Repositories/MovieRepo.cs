@@ -52,9 +52,13 @@ namespace MyCineList.Data.Repositories
                 join um in Context?.UserList!
                     on new { Id = m.ID, UserId } equals new { Id = um.MovieID, UserId = um.UserId } into userMovies
                 from um in userMovies.DefaultIfEmpty()
-                where m.IMDBTitleText.Contains(searchField)
-                orderby m.ReleaseDate!.Year descending, m.ReleaseDate!.Month descending, m.ReleaseDate!.Day descending
-                select new Movie(m, um.UserId != null, um.Rating)
+                join umr in Context?.UserMoviesRating!
+                    on new { Id = m.ID, UserId } equals new { Id = umr.MovieID, UserId = umr.UserId } into userMoviesRating
+                from umr in userMoviesRating.DefaultIfEmpty()
+                select new Movie(m, um.UserId != null, umr.Rating, (from cumr in Context!.UserMoviesRating
+                                                                    where cumr.MovieID == m.ID
+                                                                    group cumr by cumr.ID into g
+                                                                    select g.Average(a => a.Rating) * 2).FirstOrDefault())
                 )
                 .Skip((page - 1) * pageNumberMovies)
                 .Take(pageNumberMovies);
@@ -69,8 +73,14 @@ namespace MyCineList.Data.Repositories
                 join um in Context?.UserList!
                     on new { Id = m.ID, UserId } equals new { Id = um.MovieID, UserId = um.UserId } into userMovies
                 from um in userMovies.DefaultIfEmpty()
+                join umr in Context?.UserMoviesRating!
+                    on new { Id = m.ID, UserId } equals new { Id = umr.MovieID, UserId = umr.UserId } into userMoviesRating
+                from umr in userMoviesRating.DefaultIfEmpty()
                 where m.ID == movieId
-                select new Movie(m, um.UserId != null, um.Rating)
+                select new Movie(m, um.UserId != null, umr.Rating, (from cumr in Context!.UserMoviesRating
+                                                                    where cumr.MovieID == m.ID
+                                                                    group cumr by cumr.ID into g
+                                                                    select g.Average(a => a.Rating) * 2).FirstOrDefault())
                 ).FirstOrDefault();
 
             // IQueryable<Movie>? query = MovieQueryWithAllRelationship;
@@ -89,7 +99,13 @@ namespace MyCineList.Data.Repositories
                             join um in Context?.UserList!
                                 on new { Id = m.ID, UserId } equals new { Id = um.MovieID, UserId = um.UserId } into userMovies
                             from um in userMovies.DefaultIfEmpty()
-                            select new Movie(m, um.UserId != null, um.Rating)
+                            join umr in Context?.UserMoviesRating!
+                                on new { Id = m.ID, UserId } equals new { Id = umr.MovieID, UserId = umr.UserId } into userMoviesRating
+                            from umr in userMoviesRating.DefaultIfEmpty()
+                            select new Movie(m, um.UserId != null, umr.Rating, (from cumr in Context!.UserMoviesRating
+                                                                                where cumr.MovieID == m.ID
+                                                                                group cumr by cumr.MovieID into g
+                                                                                select g.Average(a => a.Rating) * 2).FirstOrDefault())
                             );
 
             if (query != null)

@@ -37,6 +37,8 @@ namespace MyCineList.Data.Context
 
         public DbSet<UserList>? UserList { get; set; }
 
+        public DbSet<UserMoviesRating>? UserMoviesRating { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -51,6 +53,7 @@ namespace MyCineList.Data.Context
             modelBuilder.ApplyConfiguration(new ReleaseDateMap());
             modelBuilder.ApplyConfiguration(new MovieDowloadYearControlMap());
             modelBuilder.ApplyConfiguration(new UserListMap());
+            modelBuilder.ApplyConfiguration(new UserMoviesRatingMap());
         }
     }
 }
