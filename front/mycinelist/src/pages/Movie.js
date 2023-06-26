@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getAxiosApiServer } from './../api/axiosBase';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { getImageByMovie } from '../api/utils';
+import { customParseFloat, getImageByMovie } from '../api/utils';
+import Stars from '../components/Stars';
 
 export default function Movie(props) {
     const { id } = useParams();
@@ -113,6 +114,13 @@ export default function Movie(props) {
                                     : <span>Não há registro até o momento</span>
                                 }
                             </div>
+                            <div className='border border-success rounded shadow bg-light p-2 mt-2'>
+                                <h6 className='fw-bold'>
+                                    <FontAwesomeIcon icon="fa-solid fa-gavel" className='text-success me-2' />
+                                    Dê sua nota a este filme!
+                                </h6>
+                                <Stars movie={movie}/>
+                            </div>
                             <div className='d-flex'>
                                 <div className='border border-danger rounded shadow bg-light p-2 mt-2'>
                                     <h6 className='fw-bold'>
@@ -122,11 +130,11 @@ export default function Movie(props) {
                                     <div className='d-flex flex-row m-auto mt-2 text-center text-white fw-bold'>
                                         <div className='d-flex flex-column border border-primary bg-primary bg-gradient rounded justify-content-center pt-2 px-3'>
                                             <span>IMDB</span>
-                                            <h2 className='fw-bolder'>{movie.imdbAggregateRatting ? movie.imdbAggregateRatting : '-.-'}</h2>
+                                            <h2 className='fw-bolder'>{customParseFloat(movie.imdbAggregateRatting, 1)}</h2>
                                         </div>
                                         <div className='d-flex flex-column border border-success bg-success bg-gradient  rounded ms-2 justify-content-center pt-2 px-3'>
                                             <span>MyCineList</span>
-                                            <h2 className='fw-bolder'>-.-</h2>
+                                            <h2 className='fw-bolder'>{customParseFloat(movie.myCineListRating, 1)}</h2>
                                         </div>
                                     </div>
                                 </div>

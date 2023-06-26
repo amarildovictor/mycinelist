@@ -54,3 +54,13 @@ export const logout = () => {
     localStorage.removeItem('userEmail');
     delete axios.defaults.headers.Authorization;
 }
+
+export const customParseFloat = (floatValue, digits) => {
+    const imdbAggregateRatting = parseFloat(floatValue);
+    if (imdbAggregateRatting) {
+        return imdbAggregateRatting.toFixed(digits);
+    }
+    else {
+        return '-.-';
+    }
+}
