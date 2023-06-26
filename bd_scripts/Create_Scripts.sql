@@ -421,3 +421,40 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+DECLARE @var5 sysname;
+SELECT @var5 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[USER_MOVIE_LIST]') AND [c].[name] = N'Rating');
+IF @var5 IS NOT NULL EXEC(N'ALTER TABLE [USER_MOVIE_LIST] DROP CONSTRAINT [' + @var5 + '];');
+ALTER TABLE [USER_MOVIE_LIST] DROP COLUMN [Rating];
+GO
+
+CREATE TABLE [USER_MOVIES_RATING] (
+    [ID] int NOT NULL IDENTITY,
+    [UserId] nvarchar(450) NULL,
+    [MovieID] int NOT NULL,
+    [Date] datetime2 NOT NULL,
+    [Rating] int NULL,
+    CONSTRAINT [PK_USER_MOVIES_RATING] PRIMARY KEY ([ID]),
+    CONSTRAINT [FK_USER_MOVIES_RATING_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]),
+    CONSTRAINT [FK_USER_MOVIES_RATING_MOVIE_MovieID] FOREIGN KEY ([MovieID]) REFERENCES [MOVIE] ([ID]) ON DELETE CASCADE
+);
+GO
+
+CREATE INDEX [IX_USER_MOVIES_RATING_MovieID] ON [USER_MOVIES_RATING] ([MovieID]);
+GO
+
+CREATE UNIQUE INDEX [IX_USER_MOVIES_RATING_UserId_MovieID] ON [USER_MOVIES_RATING] ([UserId], [MovieID]) WHERE [UserId] IS NOT NULL;
+GO
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20230625115609_fix009', N'7.0.7');
+GO
+
+COMMIT;
+GO
+
