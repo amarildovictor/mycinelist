@@ -7,13 +7,22 @@ using MyCineList.Domain.Interfaces.Services;
 
 namespace MyCineList.API.Controllers
 {
+    /// <summary>
+    /// Auth Controller class.
+    /// </summary>
     [Route("v1/[controller]")]
     public class AuthController : Controller
     {
         private readonly JWTSettings JwtSettings;
         private readonly IAccessToken AccessToken;
-        public UserManager<User> UserManager { get; }
+        private UserManager<User> UserManager { get; }
 
+        /// <summary>
+        /// Auth Controller constructor.
+        /// </summary>
+        /// <param name="jwtSettings">JWT instance.</param>
+        /// <param name="accessToken">Access token instance.</param>
+        /// <param name="userManager">User manager instance.</param>
         public AuthController(IOptions<JWTSettings> jwtSettings, IAccessToken accessToken, UserManager<User> userManager)
         {
             this.UserManager = userManager;
@@ -21,6 +30,11 @@ namespace MyCineList.API.Controllers
             this.JwtSettings = jwtSettings.Value;
         }
 
+        /// <summary>
+        /// User authentication method.
+        /// </summary>
+        /// <param name="model">User model.</param>
+        /// <returns>Action result.</returns>
         [HttpPost]
         [Route("login")]
         [AllowAnonymous]
@@ -47,6 +61,10 @@ namespace MyCineList.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Method to test anonymous access.
+        /// </summary>
+        /// <returns>Action result.</returns>
         [HttpGet]
         [Route("anonimo")]
         [AllowAnonymous]
@@ -55,6 +73,10 @@ namespace MyCineList.API.Controllers
             return Ok("Tem permissão!");
         }
 
+        /// <summary>
+        /// Method to test the jwt token validation access.
+        /// </summary>
+        /// <returns>Action result.</returns>
         [HttpGet]
         [Route("autenticado")]
         [Authorize]

@@ -6,6 +6,9 @@ using MyCineList.Domain.Interfaces.Services;
 
 namespace MyCineList.API.Controllers
 {
+    /// <summary>
+    /// Account Controller class.
+    /// </summary>
     [ApiController]
     [Route("v1/[controller]")]
     public class AccountController : ControllerBase
@@ -13,12 +16,22 @@ namespace MyCineList.API.Controllers
         private readonly UserManager<User> userManager;
         private readonly IAccessToken accessToken;
 
+        /// <summary>
+        /// Account Controller constructor.
+        /// </summary>
+        /// <param name="userManager">User manager instance.</param>
+        /// <param name="accessToken">Access token instance.</param>
         public AccountController(UserManager<User> userManager, IAccessToken accessToken)
         {
             this.accessToken = accessToken;
             this.userManager = userManager;
         }
 
+        /// <summary>
+        /// Method to register (create) an user.
+        /// </summary>
+        /// <param name="user">User model.</param>
+        /// <returns>Action result.</returns>
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] User user)
@@ -45,6 +58,10 @@ namespace MyCineList.API.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// Method to test anonymous access.
+        /// </summary>
+        /// <returns>Action result.</returns>
         [HttpGet]
         [Route("anonimo")]
         [AllowAnonymous]
@@ -53,6 +70,10 @@ namespace MyCineList.API.Controllers
             return Ok("Tem permissão!");
         }
 
+        /// <summary>
+        /// Method to test the jwt token validation access.
+        /// </summary>
+        /// <returns>Action result.</returns>
         [HttpGet]
         [Route("autenticado")]
         [Authorize]

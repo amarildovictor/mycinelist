@@ -10,13 +10,15 @@ import $ from 'jquery';
 import { useNavigate, useParams } from 'react-router-dom';
 import { logout } from '../api/utils';
 import { getUserSession } from '../api/utils';
+import { useRef } from 'react';
 
 export default function Menu(props) {
   const navigate = useNavigate();
   const { movieTimelineRelease } = useParams();
+  const offCanvasRef = useRef();
 
   const getActiveLinkMenu = (linkMenu) => {
-    if ((window.location.pathname ==='/' && linkMenu ==='HOME') || movieTimelineRelease === linkMenu) {
+    if ((window.location.pathname === '/' && linkMenu === 'HOME') || movieTimelineRelease === linkMenu) {
       return "link-success";
     }
     else
@@ -31,9 +33,21 @@ export default function Menu(props) {
     window.location.href = `/search?searchText=${searchTextInput}`;
   }
 
+  const closeOffCanvas = () => {
+    if (offCanvasRef.current.backdrop)
+      offCanvasRef.current.backdrop.click();
+  };
+
   function doLogout() {
     logout();
     props.setLogged(false);
+    navigate('/');
+    closeOffCanvas();
+  }
+
+  function onClickNavigateTo(url) {
+    navigate(url);
+    closeOffCanvas();
   }
 
   return (
@@ -48,7 +62,8 @@ export default function Menu(props) {
           </span>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="offcanvasNavbar-expand-lg" />
-        <Navbar.Offcanvas id="offcanvasNavbar-expand-lg" aria-labelledby="offcanvasNavbarLabel-expand-lg" placement="end">
+        <Navbar.Offcanvas id="offcanvasNavbar-expand-lg" aria-labelledby="offcanvasNavbarLabel-expand-lg" placement="end"
+          ref={offCanvasRef}>
           <Offcanvas.Body>
             <Nav className="me-auto">
               <Nav.Link id='homeLinkMenu' href="/" className={getActiveLinkMenu('HOME')}>Home</Nav.Link>
@@ -79,7 +94,7 @@ export default function Menu(props) {
                       {getUserSession().userEmail}
                     </>
                   }>
-                  <NavDropdown.Item onClick={() => navigate("/userThings/userList")} className='text-black'>Minha lista</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => onClickNavigateTo("/userThings/userList")} className='text-black'>Minha lista</NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item onClick={doLogout} className='text-black'>Logout</NavDropdown.Item>
                 </NavDropdown>
@@ -91,8 +106,8 @@ export default function Menu(props) {
                       Entrar
                     </>
                   }>
-                  <NavDropdown.Item onClick={() => navigate("/auth/login")} className='text-black'>Login</NavDropdown.Item>
-                  <NavDropdown.Item onClick={() => navigate("/auth/register")} className='text-black'>Cadastrar-se</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => onClickNavigateTo("/auth/login")} className='text-black'>Login</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => onClickNavigateTo("/auth/register")} className='text-black'>Cadastrar-se</NavDropdown.Item>
                 </NavDropdown>
               }
             </Nav>

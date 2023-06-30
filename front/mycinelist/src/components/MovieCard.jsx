@@ -33,7 +33,8 @@ export default function MovieCard(props) {
             await getAxiosApiServer().delete(`/UserApi/movieList/${userMovieList.movie.id}`)
                 .then(function () {
                     setIsFavorite(false);
-                    card.remove();
+                    if (window.location.pathname === '/userThings/userList')
+                        card.remove();
                 }).catch(function (error) {
                     console.log(error);
                 });
@@ -46,7 +47,7 @@ export default function MovieCard(props) {
         <div className='movieCard ms-1 me-1 mt-2 mb-2' title={props.movie.imdbTitleText}>
             <div className='position-relative'>
                 {props.logged ?
-                    <div id="favoriteMovieHeartDiv" title='Adicionar na minha lista'>
+                    <div id="favoriteMovieHeartDiv" title={`${isFavorite ? 'Remover da' : 'Adicionar na'} minha lista`}>
                         <h5 className="position-absolute top-0 end-0 border rounded m-1 p-1 bg-light">
                             {isSavingFavorite ?
                                 <div className="spinner-border text-danger spinner-border-sm" role="status">
@@ -71,7 +72,7 @@ export default function MovieCard(props) {
                     {props.movie.imdbTitleText}
                 </h6>
                 <div className="d-flex align-items-center position-relative" style={{ height: '40px' }}>
-                    <Stars movie = {props.movie}/>
+                    <Stars logged={props.logged} movie={props.movie} />
                     <div className='d-flex position-absolute bottom-0 end-0 border-top border-start border-white fs-4 fw-bold justify-content-center'
                         style={{ width: '110px' }}>
                         <span className='text-primary' title='IMDB'>{props.movie.imdbAggregateRatting}</span>

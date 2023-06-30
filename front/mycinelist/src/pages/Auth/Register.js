@@ -5,10 +5,14 @@ import FloatingLabel from 'react-bootstrap/esm/FloatingLabel';
 import $ from 'jquery';
 import { getAxiosApiServer } from '../../api/axiosBase';
 import { authSessions, validateEmail } from '../../api/utils';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Register(props) {
     const navigate = useNavigate();
+
+    if (props.logged) {
+        window.location.href = "/";
+    }
 
     const matchPassValidate = () => {
         var passwordTxtVal = $('#passwordTxt').val();
@@ -107,7 +111,7 @@ export default function Register(props) {
                     <FloatingLabel controlId="confirmPasswordTxt" label="Confirmação de senha" className='mb-2'>
                         <Form.Control type="password" placeholder="Confirmação de senha" required />
                         <Form.Control.Feedback type="invalid" id='confirmPasswordInvalidMessage'>
-                            Os campos de Senhas não correspondem
+                            Os campos de Senhas não correspondem-se
                         </Form.Control.Feedback>
                     </FloatingLabel>
                     <div className="d-flex justify-content-center">
@@ -115,6 +119,11 @@ export default function Register(props) {
                             <FontAwesomeIcon icon="fa-solid fa-right-to-bracket" className='me-2' />
                             Cadastrar-me
                         </Button>
+                    </div>
+                    <div className="d-flex justify-content-center pt-1">
+                        <Link to='/auth/login' className='text-decoration-none'>
+                            Já possui uma conta? Entre aqui.
+                        </Link>
                     </div>
                 </div>
             </div>

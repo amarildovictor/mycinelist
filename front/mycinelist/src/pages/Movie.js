@@ -56,17 +56,16 @@ export default function Movie(props) {
                 <div className='my-3'>
                     <div className='d-flex justify-content-center align-items-center flex-row-reverse'>
                         {props.logged ?
-                            <div id="favoriteMovieHeartDiv" title='Adicionar na minha lista' className='ms-2 mb-1'>
-                                <div className="border rounded m-1 p-1 bg-light" style={{minWidth:'100px'}} onClick={onclick_FavoriteMovie}>
+                            <div id="favoriteMovieHeartDiv" title={`${isFavorite ? 'Remover da' : 'Adicionar na'} minha lista`} className='ms-2 mb-1'>
+                                <div className="border rounded m-1 p-1 bg-light" style={{minWidth:'100px', cursor: 'pointer'}} onClick={onclick_FavoriteMovie}>
                                     {isSavingFavorite ?
                                         <div className="spinner-border text-danger spinner-border-sm" role="status">
                                             <span className="visually-hidden">Loading...</span>
                                         </div>
                                         :
-                                        <FontAwesomeIcon icon={`fa-${isFavorite ? 'solid' : 'regular'} fa-heart`} className="text-danger"
-                                            style={{ cursor: 'pointer' }} />
+                                        <FontAwesomeIcon icon={`fa-${isFavorite ? 'solid' : 'regular'} fa-heart`} className="text-danger"/>
                                     }
-                                    <span className='fw-normal ms-2'>Adicionar</span>
+                                    <span className='fw-normal ms-2'>{isFavorite ? 'Remover' : 'Adicionar'}</span>
                                 </div>
                             </div> : null
                         }
@@ -119,7 +118,7 @@ export default function Movie(props) {
                                     <FontAwesomeIcon icon="fa-solid fa-gavel" className='text-success me-2' />
                                     Dê sua nota a este filme!
                                 </h6>
-                                <Stars movie={movie}/>
+                                <Stars logged={props.logged} movie={movie}/>
                             </div>
                             <div className='d-flex'>
                                 <div className='border border-danger rounded shadow bg-light p-2 mt-2'>

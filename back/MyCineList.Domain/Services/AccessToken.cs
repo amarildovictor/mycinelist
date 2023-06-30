@@ -27,7 +27,7 @@ namespace MyCineList.Domain.Services
                     new Claim(ClaimTypes.Name, user.Email ?? string.Empty),
                     new Claim(ClaimTypes.NameIdentifier, user.Id ?? string.Empty)
                 }),
-                Expires = DateTime.UtcNow.AddDays(1),
+                Expires = DateTime.UtcNow.AddDays(90),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

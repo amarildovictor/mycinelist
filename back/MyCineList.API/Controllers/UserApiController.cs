@@ -12,6 +12,9 @@ using MyCineList.Domain.Interfaces.Services;
 
 namespace MyCineList.API.Controllers
 {
+    /// <summary>
+    /// User Controller class.
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
     public class UserApiController : ControllerBase
@@ -20,6 +23,12 @@ namespace MyCineList.API.Controllers
         private readonly IUserMoviesRatingService UserMoviesRatingService;
         private UserManager<User> UserManager { get; }
 
+        /// <summary>
+        /// User Controller constructor.
+        /// </summary>
+        /// <param name="userListService">User movie list service.</param>
+        /// <param name="userMoviesRatingService">Movie Rating service.</param>
+        /// <param name="userManager">User manager API.</param>
         public UserApiController(IUserListService userListService, IUserMoviesRatingService userMoviesRatingService, UserManager<User> userManager)
         {
             this.UserMoviesRatingService = userMoviesRatingService;
@@ -27,6 +36,10 @@ namespace MyCineList.API.Controllers
             this.UserListService = userListService;
         }
 
+        /// <summary>
+        /// Get the user movie list.
+        /// </summary>
+        /// <returns>The user movie list.</returns>
         [HttpGet]
         [Route("movieList")]
         [Authorize]
@@ -47,6 +60,11 @@ namespace MyCineList.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Post the movie to add in the user list.
+        /// </summary>
+        /// <param name="userMovieList">Movie to add in the user list.</param>
+        /// <returns>Action Result.</returns>
         [HttpPost]
         [Route("movieList")]
         [Authorize]
@@ -70,6 +88,11 @@ namespace MyCineList.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Post the movie user rating.
+        /// </summary>
+        /// <param name="userMoviesRating">The user movie rating.</param>
+        /// <returns>Action result.</returns>
         [HttpPost("movieList/updateRating")]
         [Authorize]
         public async Task<IActionResult> PostRating([FromBody] UserMoviesRating userMoviesRating)
@@ -79,7 +102,7 @@ namespace MyCineList.API.Controllers
                 userMoviesRating.User.Id = GetUserId();
 
                 await UserMoviesRatingService.Add(userMoviesRating);
-                
+
                 return Ok();
             }
             catch (Exception ex)
@@ -89,7 +112,11 @@ namespace MyCineList.API.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Delete a movie in the user list.
+        /// </summary>
+        /// <param name="movieId">Movie id to delete.</param>
+        /// <returns>Action result.</returns>
         [HttpDelete("movieList/{movieId}")]
         [Authorize]
         public async Task<IActionResult> Delete(int movieId)
@@ -109,6 +136,11 @@ namespace MyCineList.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Delete the movie user rating.
+        /// </summary>
+        /// <param name="movieId">Movie id to rating delete.</param>
+        /// <returns>Action result.</returns>
         [HttpDelete("movieList/removeRating{movieId}")]
         [Authorize]
         public async Task<IActionResult> DeleteRating(int movieId)

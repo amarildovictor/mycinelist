@@ -24,7 +24,7 @@ function App(props) {
       <Menu logged={logged} setLogged={setLogged} />
       {cloneElement(props.children, { logged: logged, setLogged: setLogged, handleSubmit: handleSubmit })}
 
-      <div className='d-flex justify-content-center mt-3 border-top'></div>
+      {/* <div className='d-flex justify-content-center mt-3 border-top'></div> */}
       <div className='d-flex justify-content-center mt-3 border-top border-4 bg-light'>© MyCineList - 2023 - Todos os direitos reservados.</div>
     </>
   );

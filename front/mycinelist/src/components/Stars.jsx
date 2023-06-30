@@ -18,26 +18,30 @@ export default function Stars(props) {
     const [userRating, setUserRating] = useState(props.movie.userRating);
 
     const onMouseEnter_Stars = ($this, n) => {
-        const star = $($this.currentTarget);
-        const closestDiv = star.closest('div');
+        if (props.logged) {
+            const star = $($this.currentTarget);
+            const closestDiv = star.closest('div');
 
-        setStars(stars.map((star, i) => n >= i));
+            setStars(stars.map((star, i) => n >= i));
 
-        closestDiv.removeClass('text-warning');
-        closestDiv.addClass('text-info');
+            closestDiv.removeClass('text-warning');
+            closestDiv.addClass('text-info');
+        }
     }
 
     const onMouseLeave_Stars = ($this, count) => {
-        const closestDiv = $($this.currentTarget).closest('div');
+        if (props.logged) {
+            const closestDiv = $($this.currentTarget).closest('div');
 
-        closestDiv.addClass('text-warning');
-        closestDiv.removeClass('text-info');
+            closestDiv.addClass('text-warning');
+            closestDiv.removeClass('text-info');
 
-        treatStars(null);
+            treatStars(null);
+        }
     }
 
     const onClick_Stars = async (rating) => {
-        if (rating !== userRating) {
+        if (props.logged && rating !== userRating) {
             await getAxiosApiServer().post('/UserApi/movieList/updateRating', { movie: { id: props.movie.id }, rating: rating })
                 .then(function () {
                     setUserRating(rating);
@@ -54,21 +58,28 @@ export default function Stars(props) {
         setStars(stars.map((star, i) => x - 1 >= i));
     }
 
+    const starTitle = (num) => {
+        if (props.logged)
+            return `Avaliar com nota ${num}`
+        else
+            return "Para dar uma nota, faça login."
+    }
+
     return (
         <div className='ps-2 text-warning'>
-            <FontAwesomeIcon icon={`${stars[0] ? 'fa-solid' : 'fa-regular'} fa-star`} title='Avaliar com Nota 1,0'
+            <FontAwesomeIcon icon={`${stars[0] ? 'fa-solid' : 'fa-regular'} fa-star`} title={starTitle("1.0")}
                 onMouseEnter={(e) => onMouseEnter_Stars(e, 0)} onMouseLeave={onMouseLeave_Stars}
                 onClick={() => onClick_Stars(1)} />
-            <FontAwesomeIcon icon={`${stars[1] ? 'fa-solid' : 'fa-regular'} fa-star`} title='Avaliar com Nota 2,0'
+            <FontAwesomeIcon icon={`${stars[1] ? 'fa-solid' : 'fa-regular'} fa-star`} title={starTitle("2.0")}
                 onMouseEnter={(e) => onMouseEnter_Stars(e, 1)} onMouseLeave={onMouseLeave_Stars}
                 onClick={() => onClick_Stars(2)} />
-            <FontAwesomeIcon icon={`${stars[2] ? 'fa-solid' : 'fa-regular'} fa-star`} title='Avaliar com Nota 3,0'
+            <FontAwesomeIcon icon={`${stars[2] ? 'fa-solid' : 'fa-regular'} fa-star`} title={starTitle("3.0")}
                 onMouseEnter={(e) => onMouseEnter_Stars(e, 2)} onMouseLeave={onMouseLeave_Stars}
                 onClick={() => onClick_Stars(3)} />
-            <FontAwesomeIcon icon={`${stars[3] ? 'fa-solid' : 'fa-regular'} fa-star`} title='Avaliar com Nota 4,0'
+            <FontAwesomeIcon icon={`${stars[3] ? 'fa-solid' : 'fa-regular'} fa-star`} title={starTitle("4.0")}
                 onMouseEnter={(e) => onMouseEnter_Stars(e, 3)} onMouseLeave={onMouseLeave_Stars}
                 onClick={() => onClick_Stars(4)} />
-            <FontAwesomeIcon icon={`${stars[4] ? 'fa-solid' : 'fa-regular'} fa-star`} title='Avaliar com Nota 5,0'
+            <FontAwesomeIcon icon={`${stars[4] ? 'fa-solid' : 'fa-regular'} fa-star`} title={starTitle("5.0")}
                 onMouseEnter={(e) => onMouseEnter_Stars(e, 4)} onMouseLeave={onMouseLeave_Stars}
                 onClick={() => onClick_Stars(5)} />
         </div>

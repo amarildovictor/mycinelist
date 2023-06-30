@@ -2,13 +2,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/esm/FloatingLabel';
 import Button from 'react-bootstrap/Button';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import $ from 'jquery';
 import { authSessions, validateEmail } from '../../api/utils';
 import { getAxiosApiServer } from './../../api/axiosBase';
 
 export default function Login(props) {
     const navigate = useNavigate();
+
+    if (props.logged) {
+        window.location.href = "/";
+    }
 
     const matchPassValidate = () => {
         var passwordTxtVal = $('#passwordTxt').val();
@@ -98,6 +102,11 @@ export default function Login(props) {
                             <FontAwesomeIcon icon="fa-solid fa-right-to-bracket" className='me-2' />
                             Entrar
                         </Button>
+                    </div>
+                    <div className="d-flex justify-content-center pt-1">
+                        <Link to='/auth/register' className='text-decoration-none'>
+                            Ainda não possui uma conta? Cadastre-se aqui.
+                        </Link>
                     </div>
                 </div>
             </div>

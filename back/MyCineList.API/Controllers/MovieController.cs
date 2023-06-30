@@ -6,6 +6,9 @@ using MyCineList.Domain.Interfaces.Services;
 
 namespace MyCineList.API.Controllers
 {
+    /// <summary>
+    /// Movie Controller class.
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
     public class MovieController : ControllerBase
@@ -19,6 +22,10 @@ namespace MyCineList.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Movie Controller Constructor.
+        /// </summary>
+        /// <param name="movieService">Movie service interface.</param>
         public MovieController(IMovieService movieService)
         {
             this.MovieService = movieService;
@@ -47,7 +54,7 @@ namespace MyCineList.API.Controllers
         }
 
         /// <summary>
-        /// /// Get the full info movie by its id.
+        /// Get the full info movie by its id.
         /// </summary>
         /// <param name="movieId">Movie id.</param>
         /// <returns></returns>

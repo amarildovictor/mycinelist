@@ -56,6 +56,7 @@ namespace MyCineList.Data.Repositories
                     on new { Id = m.ID, UserId } equals new { Id = umr.MovieID, UserId = umr.UserId } into userMoviesRating
                 from umr in userMoviesRating.DefaultIfEmpty()
                 where m.IMDBTitleText.Contains(searchField)
+                orderby m.ReleaseDate!.Year descending, m.ReleaseDate!.Month descending, m.ReleaseDate!.Day descending
                 select new Movie(m, um.UserId != null, umr.Rating, (from cumr in Context!.UserMoviesRating
                                                                     where cumr.MovieID == m.ID
                                                                     group cumr by cumr.MovieID into g
